@@ -28,7 +28,7 @@ def get_show_info():
     if movies:
         movie = movies[0]  # Get the first movie that matches the search
         ia.update(movie)  # Update movie with more detailed info
-        plot = movie.data.get('plot', ["No plot available."])
+        plot = ' '.join(movie.data.get('plot', ["No plot available."]))
         title = movie.data.get('title', "No title available.")
         year = movie.data.get('year', "No year available.")
         url = ia.get_imdbURL(movie)
