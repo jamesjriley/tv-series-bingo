@@ -23,9 +23,15 @@ export default function CreateGame({ onCreated, onBack }: Props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const selectedRef = useRef(false); // suppress search after picking a suggestion
 
   // Search TVMaze as user types (TV shows only)
   useEffect(() => {
+    if (selectedRef.current) {
+      selectedRef.current = false;
+      return;
+    }
+
     if (sourceType !== "tv_show" || sourceName.trim().length < 2) {
       setSuggestions([]);
       return;
@@ -168,6 +174,7 @@ export default function CreateGame({ onCreated, onBack }: Props) {
                   key={i}
                   type="button"
                   onClick={() => {
+                    selectedRef.current = true;
                     setSourceName(s.name);
                     setShowDropdown(false);
                     setSuggestions([]);
