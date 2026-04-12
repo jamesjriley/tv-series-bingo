@@ -22,6 +22,13 @@ async def create_card(game_id: str, player_id: str):
 
 @router.get("/{game_id}/players/{player_id}/card")
 async def get_card(game_id: str, player_id: str):
+    # Validate player belongs to this game
+    game = await game_service.get_game(game_id)
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+    if not any(p["id"] == player_id for p in game["players"]):
+        raise HTTPException(status_code=404, detail="Player not found in this game")
+
     squares = await card_builder.get_card(player_id)
     if not squares:
         raise HTTPException(status_code=404, detail="Card not found")

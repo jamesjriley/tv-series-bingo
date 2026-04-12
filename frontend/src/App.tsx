@@ -183,6 +183,9 @@ export default function App() {
   };
 
   const handleGameCreated = (game: Game) => {
+    // Clear old session — user hasn't joined this new game yet
+    setCurrentPlayer(null);
+    saveSession(null);
     setSelectedGameId(game.id);
     navigate("lobby", game.id);
   };
