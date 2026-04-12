@@ -1,0 +1,17 @@
+services:
+  tv-bingo:
+    build: .
+    container_name: tv-bingo
+    restart: unless-stopped
+    ports:
+      - "8088:8000"
+    volumes:
+      - bingo-data:/app/data
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DATABASE_PATH=/app/data/bingo.db
+    networks:
+      - default
+
+volumes:
+  bingo-data:
