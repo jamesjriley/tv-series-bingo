@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Home from "./pages/Home";
 import CreateGame from "./pages/CreateGame";
 import Lobby from "./pages/Lobby";
@@ -11,7 +11,6 @@ type Page = "home" | "create" | "lobby" | "play";
 
 const STORAGE_KEY = "tv-bingo-session";
 const NAME_KEY = "tv-bingo-name";
-const PAGE_KEY = "tv-bingo-page";
 
 interface Session {
   gameId: string;
@@ -45,50 +44,117 @@ function saveName(name: string) {
   }
 }
 
+/** Parse the current URL into page + gameId */
+function parseURL(): { page: Page; gameId: string | null } {
+  const path = window.location.pathname;
+
+  const playMatch = path.match(/^\/game\/([^/]+)\/play$/);
+  if (playMatch) return { page: "play", gameId: playMatch[1] };
+
+  const gameMatch = path.match(/^\/game\/([^/]+)$/);
+  if (gameMatch) return { page: "lobby", gameId: gameMatch[1] };
+
+  if (path === "/new") return { page: "create", gameId: null };
+
+  return { page: "home", gameId: null };
+}
+
+/** Build a URL path for a given page + gameId */
+function buildURL(page: Page, gameId: string | null): string {
+  if (page === "create") return "/new";
+  if (page === "lobby" && gameId) return `/game/${gameId}`;
+  if (page === "play" && gameId) return `/game/${gameId}/play`;
+  return "/";
+}
+
 export default function App() {
   const [page, setPageState] = useState<Page>("home");
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [restoring, setRestoring] = useState(true);
 
-  // Wrap setPage to persist in localStorage
-  const setPage = (p: Page) => {
+  /** Navigate to a page, updating URL and state */
+  const navigate = useCallback((p: Page, gameId?: string | null) => {
+    const gid = gameId ?? selectedGameId;
     setPageState(p);
-    localStorage.setItem(PAGE_KEY, p);
-  };
+    if (p === "home" || p === "create") {
+      setSelectedGameId(null);
+    } else if (gameId !== undefined) {
+      setSelectedGameId(gameId);
+    }
+    const url = buildURL(p, gid ?? null);
+    if (window.location.pathname !== url) {
+      window.history.pushState({ page: p, gameId: gid }, "", url);
+    }
+  }, [selectedGameId]);
 
-  // Restore session on mount — return to where the user left off
+  // Handle browser back/forward
   useEffect(() => {
-    const session = loadSession();
-    const savedPage = localStorage.getItem(PAGE_KEY) as Page | null;
+    const onPopState = () => {
+      const { page: urlPage, gameId } = parseURL();
+      setPageState(urlPage);
+      setSelectedGameId(gameId);
 
-    if (!session) {
-      setRestoring(false);
+      // Restore player from session if navigating to a game page
+      if ((urlPage === "lobby" || urlPage === "play") && gameId) {
+        const session = loadSession();
+        if (session?.gameId === gameId) {
+          setCurrentPlayer(session.player);
+        } else {
+          setCurrentPlayer(null);
+        }
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  // On mount: parse URL first, then validate session
+  useEffect(() => {
+    const { page: urlPage, gameId: urlGameId } = parseURL();
+    const session = loadSession();
+
+    // If URL points to a specific game, try to restore into it
+    if (urlGameId && (urlPage === "lobby" || urlPage === "play")) {
+      getGame(urlGameId)
+        .then((game) => {
+          setSelectedGameId(urlGameId);
+
+          // Check if we have a session for this game
+          if (session?.gameId === urlGameId) {
+            const stillIn = game.players.some((p) => p.id === session.player.id);
+            if (stillIn) {
+              setCurrentPlayer(session.player);
+              setPageState(urlPage);
+            } else {
+              // Player removed — go to lobby to rejoin
+              saveSession(null);
+              setCurrentPlayer(null);
+              setPageState("lobby");
+            }
+          } else {
+            // No session for this game — show lobby to join
+            setCurrentPlayer(null);
+            setPageState("lobby");
+          }
+        })
+        .catch(() => {
+          // Game doesn't exist — go home
+          setPageState("home");
+          window.history.replaceState(null, "", "/");
+        })
+        .finally(() => setRestoring(false));
       return;
     }
 
-    // Validate the session against the server before restoring
-    getGame(session.gameId)
-      .then((game) => {
-        const stillInGame = game.players.some((p) => p.id === session.player.id);
-        if (stillInGame) {
-          setSelectedGameId(session.gameId);
-          setCurrentPlayer(session.player);
-          // Restore to saved page if it requires a session, otherwise home
-          if (savedPage === "play" || savedPage === "lobby") {
-            setPageState(savedPage);
-          } else {
-            setPageState(savedPage || "home");
-          }
-        } else {
-          saveSession(null);
-        }
-      })
-      .catch(() => {
-        // Game no longer exists
-        saveSession(null);
-      })
-      .finally(() => setRestoring(false));
+    // Non-game URLs: create or home
+    if (urlPage === "create") {
+      setPageState("create");
+    } else {
+      // Home page — but check if there's a saved session to offer quick resume
+      setPageState("home");
+    }
+    setRestoring(false);
   }, []);
 
   const handleSelectGame = (game: Game) => {
@@ -97,30 +163,28 @@ export default function App() {
     // Check if we're already a player in this game
     const session = loadSession();
     if (session?.gameId === game.id) {
-      // Validate the player still exists in the game's player list
       const stillInGame = game.players.some((p) => p.id === session.player.id);
       if (stillInGame) {
         setCurrentPlayer(session.player);
         if (game.status === "active" || game.status === "finished") {
-          setPage("play");
+          navigate("play", game.id);
         } else {
-          setPage("lobby");
+          navigate("lobby", game.id);
         }
       } else {
-        // Stale session — player no longer in game (DB was reset, etc.)
         saveSession(null);
         setCurrentPlayer(null);
-        setPage("lobby");
+        navigate("lobby", game.id);
       }
     } else {
       setCurrentPlayer(null);
-      setPage("lobby");
+      navigate("lobby", game.id);
     }
   };
 
   const handleGameCreated = (game: Game) => {
     setSelectedGameId(game.id);
-    setPage("lobby");
+    navigate("lobby", game.id);
   };
 
   const handleJoined = (player: Player) => {
@@ -130,11 +194,11 @@ export default function App() {
   };
 
   const handleStart = () => {
-    setPage("play");
+    navigate("play");
   };
 
   const handleBackToHome = () => {
-    setPage("home");
+    navigate("home");
     setSelectedGameId(null);
   };
 
@@ -150,7 +214,7 @@ export default function App() {
     case "home":
       return (
         <Home
-          onCreateGame={() => setPage("create")}
+          onCreateGame={() => navigate("create")}
           onSelectGame={handleSelectGame}
         />
       );

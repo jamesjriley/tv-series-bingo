@@ -14,14 +14,18 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    Promise.all([listGames(), getStats()])
-      .then(([g, s]) => {
-        setGames(g);
-        setStats(s);
-        setError(false);
-      })
+    let done = 0;
+    const finish = () => { if (++done >= 2) setLoading(false); };
+
+    listGames()
+      .then((g) => { setGames(g); setError(false); })
       .catch(() => setError(true))
-      .finally(() => setLoading(false));
+      .finally(finish);
+
+    getStats()
+      .then((s) => setStats(s))
+      .catch(() => {}) // stats failure is non-critical
+      .finally(finish);
   }, []);
 
   const activeGames = games.filter((g) => g.status !== "finished");

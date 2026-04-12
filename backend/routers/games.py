@@ -44,6 +44,6 @@ async def start_game(game_id: str):
     game = await game_service.get_game(game_id)
     if game:
         await telegram.notify_game_started(
-            game["source_name"], game["source_type"], game["player_count"]
+            game["source_name"], game["source_type"], game["player_count"], game_id
         )
     return {"ok": True}

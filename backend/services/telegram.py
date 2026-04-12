@@ -5,16 +5,21 @@ from backend.config import settings
 TELEGRAM_API = "https://api.telegram.org/bot{token}/sendMessage"
 
 
-async def notify_game_started(source_name: str, source_type: str, player_count: int):
+async def notify_game_started(source_name: str, source_type: str, player_count: int, game_id: str = ""):
     if not settings.telegram_bot_token or not settings.telegram_group_id:
         return
 
     kind = "YouTube" if source_type == "youtube" else "TV Show"
+    join_line = "Join from any device on the WiFi."
+    if settings.base_url and game_id:
+        link = f"{settings.base_url.rstrip('/')}/game/{game_id}"
+        join_line = f'<a href="{link}">Join the game</a>'
+
     text = (
         f"📺 <b>[[ TV Bingo ]]</b>\n\n"
         f"A new game of <b>{source_name}</b> ({kind}) has started!\n"
         f"{player_count} player{'s' if player_count != 1 else ''} in the game.\n\n"
-        f"Join from any device on the WiFi."
+        f"{join_line}"
     )
 
     payload = {

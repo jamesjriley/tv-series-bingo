@@ -166,22 +166,27 @@ async def get_stats() -> dict:
         )
         status_counts = {row["status"]: row["cnt"] for row in await cursor.fetchall()}
 
-        # Leaderboard: wins per player name (grouped by name for soft identity)
+        # Leaderboard: wins per player name — only multiplayer games count
         cursor = await db.execute("""
             SELECT p.name, COUNT(*) as wins
             FROM games g
             JOIN players p ON p.id = g.winner_player_id
             WHERE g.status = 'finished'
+              AND (SELECT COUNT(*) FROM players WHERE game_id = g.id) > 1
             GROUP BY LOWER(p.name)
             ORDER BY wins DESC
             LIMIT 10
         """)
-        leaderboard = [{"name": row["name"], "wins": row["cnt"]} for row in await cursor.fetchall()]
+        leaderboard = [{"name": row["name"], "wins": row["wins"]} for row in await cursor.fetchall()]
 
-        # Games played per player name
+        # Games played per player name — only multiplayer games count for marks
         cursor = await db.execute("""
             SELECT p.name, COUNT(DISTINCT p.game_id) as games_played,
-                   SUM(CASE WHEN cs.marked = 1 AND cs.is_free = 0 THEN 1 ELSE 0 END) as total_marks
+                   SUM(CASE
+                     WHEN cs.marked = 1 AND cs.is_free = 0
+                       AND (SELECT COUNT(*) FROM players p2 WHERE p2.game_id = p.game_id) > 1
+                     THEN 1 ELSE 0
+                   END) as total_marks
             FROM players p
             LEFT JOIN card_squares cs ON cs.player_id = p.id
             GROUP BY LOWER(p.name)
