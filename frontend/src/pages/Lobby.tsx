@@ -52,6 +52,12 @@ export default function Lobby({
   };
 
   const handleStart = async () => {
+    const count = game?.players.length || 0;
+    if (count < 2) {
+      if (!confirm("Start with just you? Other players can still join later.")) return;
+    } else {
+      if (!confirm(`Start the game for all ${count} players?`)) return;
+    }
     await startGame(gameId);
     onStart();
   };
@@ -171,7 +177,9 @@ export default function Lobby({
               >
                 {p.name.charAt(0).toUpperCase()}
               </span>
-              {p.name}
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {p.name}
+              </span>
               {currentPlayer?.id === p.id && (
                 <span className="text-secondary" style={{ fontSize: "0.8rem", fontWeight: 400 }}>
                   (you)

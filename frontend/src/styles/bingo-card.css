@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 6px;
-  width: min(98vw, 500px);
+  width: min(calc(100vw - 32px), 500px);
   margin: 0 auto;
 }
 
@@ -72,7 +72,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 6px;
-  width: min(98vw, 500px);
+  width: min(calc(100vw - 32px), 500px);
   margin: 0 auto 6px;
 }
 
@@ -101,9 +101,13 @@
 
 .progress-name {
   font-weight: 600;
-  min-width: 80px;
+  min-width: 60px;
+  max-width: 120px;
   font-size: 0.9rem;
   color: var(--sage-800);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .progress-bar-bg {

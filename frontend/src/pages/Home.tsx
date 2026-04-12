@@ -11,14 +11,16 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
   const [games, setGames] = useState<Game[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     Promise.all([listGames(), getStats()])
       .then(([g, s]) => {
         setGames(g);
         setStats(s);
+        setError(false);
       })
-      .catch(console.error)
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -39,6 +41,17 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
       </button>
 
       {loading && <div className="spinner" />}
+
+      {error && (
+        <div className="card text-center mt-6" style={{ padding: 20 }}>
+          <p style={{ color: "var(--danger)", fontWeight: 600, margin: "0 0 8px" }}>
+            Couldn't reach the server
+          </p>
+          <p className="text-secondary" style={{ fontSize: "0.85rem", margin: 0 }}>
+            Make sure you're on the same network as the game host.
+          </p>
+        </div>
+      )}
 
       {activeGames.length > 0 && (
         <div className="mt-6">
