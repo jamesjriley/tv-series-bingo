@@ -145,3 +145,20 @@ async def set_winner(game_id: str, player_id: str):
         await db.commit()
     finally:
         await db.close()
+
+
+async def delete_game(game_id: str):
+    """Delete a game and all its related data (moments, players, cards)."""
+    db = await get_db()
+    try:
+        # Delete in dependency order
+        await db.execute(
+            "DELETE FROM card_squares WHERE player_id IN (SELECT id FROM players WHERE game_id = ?)",
+            (game_id,),
+        )
+        await db.execute("DELETE FROM moments WHERE game_id = ?", (game_id,))
+        await db.execute("DELETE FROM players WHERE game_id = ?", (game_id,))
+        await db.execute("DELETE FROM games WHERE id = ?", (game_id,))
+        await db.commit()
+    finally:
+        await db.close()

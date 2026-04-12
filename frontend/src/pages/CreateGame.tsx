@@ -82,6 +82,7 @@ export default function CreateGame({ onCreated, onBack }: Props) {
             type="text"
             value={sourceName}
             onChange={(e) => setSourceName(e.target.value)}
+            maxLength={200}
             placeholder={
               sourceType === "tv_show"
                 ? "e.g. Time Team, The Office, Bake Off"

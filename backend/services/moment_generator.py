@@ -87,7 +87,15 @@ def _parse_json(text: str) -> dict:
     raise ValueError(f"Could not parse JSON from response: {text[:200]}")
 
 
+def _sanitize_input(text: str) -> str:
+    """Strip control characters and limit length for AI prompt inputs."""
+    # Remove control characters except newlines
+    text = re.sub(r"[\x00-\x09\x0b-\x1f\x7f]", "", text)
+    return text[:200].strip()
+
+
 async def generate_moments_for_show(game_id: str, show_name: str) -> list[dict]:
+    show_name = _sanitize_input(show_name)
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
 
     response = client.messages.create(

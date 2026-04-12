@@ -1,14 +1,52 @@
-from pydantic import BaseModel
+import re
+from typing import Literal
+
+from pydantic import BaseModel, field_validator
 
 
 class GameCreate(BaseModel):
-    source_type: str  # "tv_show" or "youtube"
-    source_name: str  # show name or channel/video info
-    video_urls: list[str] = []  # for youtube, optional list of video URLs
+    source_type: Literal["tv_show", "youtube"]
+    source_name: str
+    video_urls: list[str] = []
+
+    @field_validator("source_name")
+    @classmethod
+    def validate_source_name(cls, v: str) -> str:
+        v = v.strip()
+        if not v or len(v) > 200:
+            raise ValueError("Source name must be 1-200 characters")
+        return v
+
+    @field_validator("video_urls")
+    @classmethod
+    def validate_video_urls(cls, v: list[str]) -> list[str]:
+        if len(v) > 10:
+            raise ValueError("Maximum 10 video URLs")
+        validated = []
+        for url in v:
+            url = url.strip()
+            if not url:
+                continue
+            if not re.match(r"^https?://(www\.)?(youtube\.com|youtu\.be)/", url):
+                raise ValueError(f"Invalid YouTube URL: {url[:100]}")
+            if len(url) > 500:
+                raise ValueError("URL too long")
+            validated.append(url)
+        return validated
 
 
 class PlayerJoin(BaseModel):
     name: str
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        v = v.strip()
+        if not v or len(v) > 30:
+            raise ValueError("Name must be 1-30 characters")
+        if not re.match(r"^[\w\s\-'.]+$", v):
+            raise ValueError("Name contains invalid characters")
+        return v
 
 
 class GameSummary(BaseModel):

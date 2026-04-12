@@ -51,11 +51,18 @@ async def websocket_endpoint(ws: WebSocket, game_id: str, player_id: str):
     try:
         while True:
             raw = await ws.receive_text()
-            msg = json.loads(raw)
+            if len(raw) > 4096:
+                continue  # reject oversized messages
+            try:
+                msg = json.loads(raw)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(msg, dict) or "type" not in msg:
+                continue
 
             if msg["type"] == "mark_square":
                 square_id = msg.get("square_id") or msg.get("data", {}).get("square_id")
-                if not square_id:
+                if not square_id or not isinstance(square_id, str) or len(square_id) > 50:
                     continue
                 result = await card_builder.toggle_square(square_id)
                 if not result:

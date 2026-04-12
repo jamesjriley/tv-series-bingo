@@ -20,6 +20,7 @@ export default function Lobby({
   const [game, setGame] = useState<Game | null>(null);
   const [name, setName] = useState("");
   const [joining, setJoining] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const load = () => getGame(gameId).then(setGame).catch(console.error);
@@ -32,11 +33,12 @@ export default function Lobby({
     e.preventDefault();
     if (!name.trim()) return;
     setJoining(true);
+    setError("");
     try {
       const player = await joinGame(gameId, name.trim());
       onJoined(player);
     } catch (err) {
-      console.error(err);
+      setError(err instanceof Error ? err.message : "Failed to join game");
     } finally {
       setJoining(false);
     }
@@ -85,8 +87,14 @@ export default function Lobby({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
+            maxLength={30}
             autoFocus
           />
+          {error && (
+            <p style={{ color: "var(--danger)", fontWeight: 600, fontSize: "0.85rem", margin: 0 }}>
+              {error}
+            </p>
+          )}
           <button
             type="submit"
             className="btn-primary btn-large"
