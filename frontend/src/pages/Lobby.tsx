@@ -24,6 +24,7 @@ export default function Lobby({
   const [editing, setEditing] = useState(!savedName);
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState("");
+  const [confirmStart, setConfirmStart] = useState(false);
 
   useEffect(() => {
     const load = () => getGame(gameId).then(setGame).catch(console.error);
@@ -52,11 +53,9 @@ export default function Lobby({
   };
 
   const handleStart = async () => {
-    const count = game?.players.length || 0;
-    if (count < 2) {
-      if (!confirm("Start with just you? Other players can still join later.")) return;
-    } else {
-      if (!confirm(`Start the game for all ${count} players?`)) return;
+    if (!confirmStart) {
+      setConfirmStart(true);
+      return;
     }
     await startGame(gameId);
     onStart();
@@ -191,13 +190,49 @@ export default function Lobby({
       </div>
 
       {currentPlayer && game.status === "lobby" && (
-        <button
-          className="btn-primary btn-large mt-6"
-          style={{ width: "100%" }}
-          onClick={handleStart}
-        >
-          Start Game
-        </button>
+        <div className="mt-6">
+          {confirmStart ? (
+            <div
+              className="card"
+              style={{
+                background: "var(--sage-100)",
+                border: "1px solid var(--sage-300)",
+                padding: 16,
+                textAlign: "center",
+              }}
+            >
+              <p style={{ fontWeight: 600, margin: "0 0 8px", color: "var(--sage-800)" }}>
+                {(game.players.length || 0) < 2
+                  ? "Start with just you? Others can still join later."
+                  : `Start the game for all ${game.players.length} players?`}
+              </p>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  className="btn-secondary"
+                  style={{ flex: 1 }}
+                  onClick={() => setConfirmStart(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-primary"
+                  style={{ flex: 1 }}
+                  onClick={handleStart}
+                >
+                  Start Game
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              className="btn-primary btn-large"
+              style={{ width: "100%" }}
+              onClick={handleStart}
+            >
+              Start Game
+            </button>
+          )}
+        </div>
       )}
 
       {currentPlayer && (game.status === "active" || game.status === "finished") && (

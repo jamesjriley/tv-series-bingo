@@ -11,6 +11,7 @@ type Page = "home" | "create" | "lobby" | "play";
 
 const STORAGE_KEY = "tv-bingo-session";
 const NAME_KEY = "tv-bingo-name";
+const PAGE_KEY = "tv-bingo-page";
 
 interface Session {
   gameId: string;
@@ -45,14 +46,22 @@ function saveName(name: string) {
 }
 
 export default function App() {
-  const [page, setPage] = useState<Page>("home");
+  const [page, setPageState] = useState<Page>("home");
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [restoring, setRestoring] = useState(true);
 
-  // Restore session on mount — go directly to the game board if valid
+  // Wrap setPage to persist in localStorage
+  const setPage = (p: Page) => {
+    setPageState(p);
+    localStorage.setItem(PAGE_KEY, p);
+  };
+
+  // Restore session on mount — return to where the user left off
   useEffect(() => {
     const session = loadSession();
+    const savedPage = localStorage.getItem(PAGE_KEY) as Page | null;
+
     if (!session) {
       setRestoring(false);
       return;
@@ -65,10 +74,11 @@ export default function App() {
         if (stillInGame) {
           setSelectedGameId(session.gameId);
           setCurrentPlayer(session.player);
-          if (game.status === "active" || game.status === "finished") {
-            setPage("play");
+          // Restore to saved page if it requires a session, otherwise home
+          if (savedPage === "play" || savedPage === "lobby") {
+            setPageState(savedPage);
           } else {
-            setPage("lobby");
+            setPageState(savedPage || "home");
           }
         } else {
           saveSession(null);

@@ -110,6 +110,15 @@ async def join_game(game_id: str, player_name: str) -> dict | None:
         if not game:
             return None
 
+        # Return existing player if same name already in this game
+        cursor = await db.execute(
+            "SELECT id, name FROM players WHERE game_id = ? AND LOWER(name) = LOWER(?)",
+            (game_id, player_name),
+        )
+        existing = await cursor.fetchone()
+        if existing:
+            return {"id": existing["id"], "name": existing["name"], "game_id": game_id}
+
         player_id = str(uuid.uuid4())
         now = datetime.now(timezone.utc).isoformat()
         await db.execute(

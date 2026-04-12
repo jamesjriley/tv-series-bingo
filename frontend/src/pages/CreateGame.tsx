@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createGame, generateMoments } from "../api";
 import type { Game } from "../types/game";
+
+interface ShowResult {
+  name: string;
+  year: string;
+  network: string;
+}
 
 interface Props {
   onCreated: (game: Game) => void;
@@ -13,6 +19,53 @@ export default function CreateGame({ onCreated, onBack }: Props) {
   const [videoUrls, setVideoUrls] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [suggestions, setSuggestions] = useState<ShowResult[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Search TVMaze as user types (TV shows only)
+  useEffect(() => {
+    if (sourceType !== "tv_show" || sourceName.trim().length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(sourceName.trim())}`
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        const results: ShowResult[] = data.slice(0, 6).map(
+          (item: { show: { name: string; premiered?: string; network?: { name: string } } }) => ({
+            name: item.show.name,
+            year: item.show.premiered?.slice(0, 4) || "",
+            network: item.show.network?.name || "",
+          })
+        );
+        setSuggestions(results);
+        setShowDropdown(results.length > 0);
+      } catch {
+        // Silently fail — autocomplete is non-critical
+      }
+    }, 300);
+
+    return () => clearTimeout(debounceRef.current);
+  }, [sourceName, sourceType]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,21 +127,85 @@ export default function CreateGame({ onCreated, onBack }: Props) {
           </div>
         </div>
 
-        <div>
+        <div style={{ position: "relative" }} ref={dropdownRef}>
           <label style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>
             {sourceType === "tv_show" ? "Show Name" : "Channel / Creator Name"}
           </label>
           <input
             type="text"
             value={sourceName}
-            onChange={(e) => setSourceName(e.target.value)}
+            onChange={(e) => {
+              setSourceName(e.target.value);
+              setShowDropdown(true);
+            }}
+            onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
             maxLength={200}
+            autoComplete="off"
             placeholder={
               sourceType === "tv_show"
                 ? "e.g. Time Team, The Office, Bake Off"
                 : "e.g. Tom Scott, Numberphile"
             }
           />
+          {showDropdown && suggestions.length > 0 && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                background: "var(--surface)",
+                border: "1px solid var(--sage-300)",
+                borderRadius: "var(--radius)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                zIndex: 10,
+                marginTop: 4,
+                overflow: "hidden",
+              }}
+            >
+              {suggestions.map((s, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setSourceName(s.name);
+                    setShowDropdown(false);
+                    setSuggestions([]);
+                  }}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                    padding: "10px 14px",
+                    border: "none",
+                    borderBottom: i < suggestions.length - 1 ? "1px solid var(--sage-100)" : "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    fontSize: "0.9rem",
+                    color: "var(--text-primary)",
+                    fontFamily: "inherit",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--sage-100)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                >
+                  <span style={{ fontWeight: 600 }}>{s.name}</span>
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-secondary)",
+                      fontFamily: "'JetBrains Mono', monospace",
+                      whiteSpace: "nowrap",
+                      marginLeft: 12,
+                    }}
+                  >
+                    {[s.year, s.network].filter(Boolean).join(" · ")}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {sourceType === "youtube" && (
