@@ -12,6 +12,10 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [showAllActive, setShowAllActive] = useState(false);
+  const [showAllFinished, setShowAllFinished] = useState(false);
+
+  const PAGE_SIZE = 5;
 
   useEffect(() => {
     let done = 0;
@@ -61,10 +65,19 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
         <div className="mt-6">
           <h2>Games In Play</h2>
           <div className="gap-3">
-            {activeGames.map((game) => (
+            {(showAllActive ? activeGames : activeGames.slice(0, PAGE_SIZE)).map((game) => (
               <GameCard key={game.id} game={game} onClick={() => onSelectGame(game)} />
             ))}
           </div>
+          {activeGames.length > PAGE_SIZE && !showAllActive && (
+            <button
+              className="btn-secondary"
+              style={{ width: "100%", marginTop: 8, fontSize: "0.85rem" }}
+              onClick={() => setShowAllActive(true)}
+            >
+              Show all ({activeGames.length})
+            </button>
+          )}
         </div>
       )}
 
@@ -72,10 +85,19 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
         <div className="mt-6">
           <h2>Finished</h2>
           <div className="gap-3">
-            {finishedGames.map((game) => (
+            {(showAllFinished ? finishedGames : finishedGames.slice(0, PAGE_SIZE)).map((game) => (
               <GameCard key={game.id} game={game} onClick={() => onSelectGame(game)} />
             ))}
           </div>
+          {finishedGames.length > PAGE_SIZE && !showAllFinished && (
+            <button
+              className="btn-secondary"
+              style={{ width: "100%", marginTop: 8, fontSize: "0.85rem" }}
+              onClick={() => setShowAllFinished(true)}
+            >
+              Show all ({finishedGames.length})
+            </button>
+          )}
         </div>
       )}
 
