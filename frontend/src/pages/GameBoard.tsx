@@ -16,6 +16,8 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
   const [progress, setProgress] = useState<PlayerProgress[]>([]);
   const [winner, setWinner] = useState<{ player_id: string; winning_line: number[] } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activityLog, setActivityLog] = useState<{ player_name: string; moment_text: string; marked: boolean; time: string }[]>([]);
 
   // Load game info and card
   useEffect(() => {
@@ -28,6 +30,9 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
         let card;
         try {
           card = await getCard(gameId, player.id);
+          if (!card.squares || card.squares.length === 0) {
+            card = await createCard(gameId, player.id);
+          }
         } catch {
           card = await createCard(gameId, player.id);
         }
@@ -38,6 +43,7 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
         }
       } catch (err) {
         console.error(err);
+        setError("Couldn't load your bingo card. Try going back and rejoining the game.");
       } finally {
         setLoading(false);
       }
@@ -49,7 +55,13 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
   const handleWS = useCallback(
     (msg: WSMessage) => {
       if (msg.type === "square_toggled") {
-        const data = msg.data as { player_id: string; square_id: string; marked: boolean };
+        const data = msg.data as {
+          player_id: string;
+          player_name: string;
+          square_id: string;
+          marked: boolean;
+          moment_text: string;
+        };
         // Update our own card if it's our square
         if (data.player_id === player.id) {
           setSquares((prev) =>
@@ -58,6 +70,13 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
             )
           );
         }
+        // Add to activity log
+        const now = new Date();
+        const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        setActivityLog((prev) => [
+          { player_name: data.player_name, moment_text: data.moment_text, marked: data.marked, time },
+          ...prev.slice(0, 19),
+        ]);
       } else if (msg.type === "progress_update") {
         const data = msg.data as { progress: PlayerProgress[] };
         setProgress(data.progress);
@@ -104,6 +123,19 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
     );
   }
 
+  if (error || squares.length === 0) {
+    return (
+      <div className="page text-center">
+        <p style={{ color: "var(--danger)", fontWeight: 600, marginBottom: 16 }}>
+          {error || "No card found. Try rejoining the game."}
+        </p>
+        <button className="btn-secondary" onClick={onBack}>
+          &larr; Back to Home
+        </button>
+      </div>
+    );
+  }
+
   const getDifficultyClass = (sq: CardSquare) => {
     if (sq.is_free) return "free";
     if (sq.marked) return "marked";
@@ -128,7 +160,7 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
           &larr; Back
         </button>
         <div className="text-center" style={{ flex: 1 }}>
-          <div style={{ fontWeight: 700, fontSize: "1.1rem" }}>
+          <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: "1.2rem" }}>
             {game?.source_name}
           </div>
           <div
@@ -149,8 +181,8 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
         <div
           className="card text-center mb-4"
           style={{
-            background: isWinner ? "var(--success)" : "var(--accent)",
-            color: "white",
+            background: isWinner ? "var(--success)" : "var(--sage-700)",
+            color: "var(--sage-50)",
             padding: "16px",
           }}
         >
@@ -209,6 +241,55 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
         </span>
       </div>
 
+      {/* Activity feed */}
+      {activityLog.length > 0 && (
+        <div className="mt-6">
+          <h2>[[ Activity ]]</h2>
+          <div
+            style={{
+              maxHeight: 200,
+              overflowY: "auto",
+              borderRadius: "var(--radius)",
+              border: "1px solid var(--sage-200)",
+              background: "var(--surface)",
+            }}
+          >
+            {activityLog.map((entry, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "8px 12px",
+                  borderBottom: i < activityLog.length - 1 ? "1px solid var(--sage-100)" : "none",
+                  fontSize: "0.85rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <div>
+                  <strong style={{ color: "var(--sage-800)" }}>{entry.player_name}</strong>{" "}
+                  <span style={{ color: entry.marked ? "var(--success)" : "var(--danger)" }}>
+                    {entry.marked ? "marked" : "unmarked"}
+                  </span>{" "}
+                  <span style={{ color: "var(--sage-700)" }}>{entry.moment_text}</span>
+                </div>
+                <span
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.7rem",
+                    color: "var(--sage-400)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {entry.time}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Player progress */}
       {progress.length > 0 && (
         <div className="mt-6">
@@ -230,7 +311,7 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
                         background:
                           winner?.player_id === p.id
                             ? "var(--success)"
-                            : "var(--primary)",
+                            : "var(--sage-600)",
                       }}
                     />
                   </div>

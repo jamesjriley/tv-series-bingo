@@ -52,10 +52,19 @@ export default function App() {
     // Check if we're already a player in this game
     const session = loadSession();
     if (session?.gameId === game.id) {
-      setCurrentPlayer(session.player);
-      if (game.status === "active" || game.status === "finished") {
-        setPage("play");
+      // Validate the player still exists in the game's player list
+      const stillInGame = game.players.some((p) => p.id === session.player.id);
+      if (stillInGame) {
+        setCurrentPlayer(session.player);
+        if (game.status === "active" || game.status === "finished") {
+          setPage("play");
+        } else {
+          setPage("lobby");
+        }
       } else {
+        // Stale session — player no longer in game (DB was reset, etc.)
+        saveSession(null);
+        setCurrentPlayer(null);
         setPage("lobby");
       }
     } else {

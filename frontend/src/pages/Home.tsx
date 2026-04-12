@@ -31,7 +31,7 @@ export default function Home({ onCreateGame, onSelectGame }: Props) {
       </div>
 
       <button className="btn-primary btn-large" style={{ width: "100%" }} onClick={onCreateGame}>
-        New Game
+        [[ New Game ]]
       </button>
 
       {loading && <div className="spinner" />}
@@ -77,10 +77,10 @@ function GameCard({ game, onClick }: { game: Game; onClick: () => void }) {
 
   const statusColor =
     game.status === "lobby"
-      ? "var(--accent)"
+      ? "var(--sage-500)"
       : game.status === "active"
         ? "var(--success)"
-        : "var(--text-secondary)";
+        : "var(--sage-400)";
 
   return (
     <button

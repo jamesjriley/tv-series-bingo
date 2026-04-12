@@ -1,4 +1,5 @@
 import json
+import re
 import uuid
 
 import anthropic
@@ -61,11 +62,29 @@ MOMENT_SCHEMA = {
                     },
                 },
                 "required": ["text", "likelihood", "category"],
+                "additionalProperties": False,
             },
         }
     },
     "required": ["moments"],
+    "additionalProperties": False,
 }
+
+
+def _parse_json(text: str) -> dict:
+    """Extract JSON from a response that may include markdown code fences."""
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    match = re.search(r"```(?:json)?\s*\n?(.*?)\n?```", text, re.DOTALL)
+    if match:
+        return json.loads(match.group(1))
+    start = text.find("{")
+    end = text.rfind("}") + 1
+    if start >= 0 and end > start:
+        return json.loads(text[start:end])
+    raise ValueError(f"Could not parse JSON from response: {text[:200]}")
 
 
 async def generate_moments_for_show(game_id: str, show_name: str) -> list[dict]:
@@ -77,7 +96,7 @@ async def generate_moments_for_show(game_id: str, show_name: str) -> list[dict]:
         system=[
             {
                 "type": "text",
-                "text": SYSTEM_PROMPT,
+                "text": SYSTEM_PROMPT + "\n\nRespond ONLY with the JSON object, no other text.",
                 "cache_control": {"type": "ephemeral"},
             }
         ],
@@ -87,11 +106,9 @@ async def generate_moments_for_show(game_id: str, show_name: str) -> list[dict]:
                 "content": f"Generate bingo moments for the TV show: {show_name}",
             }
         ],
-        extra_headers={"anthropic-beta": "output-128k-2025-02-19"},
-        output_schema=MOMENT_SCHEMA,
     )
 
-    result = json.loads(response.content[0].text)
+    result = _parse_json(response.content[0].text)
     return await _store_moments(game_id, result["moments"])
 
 
@@ -104,7 +121,7 @@ async def generate_moments_from_transcripts(
 
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
 
-    prompt = YOUTUBE_PROMPT.format(transcripts=transcripts)
+    prompt = YOUTUBE_PROMPT.format(transcripts=transcripts) + "\n\nRespond ONLY with the JSON object, no other text."
 
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
@@ -115,11 +132,9 @@ async def generate_moments_from_transcripts(
                 "content": prompt,
             }
         ],
-        extra_headers={"anthropic-beta": "output-128k-2025-02-19"},
-        output_schema=MOMENT_SCHEMA,
     )
 
-    result = json.loads(response.content[0].text)
+    result = _parse_json(response.content[0].text)
     return await _store_moments(game_id, result["moments"])
 
 

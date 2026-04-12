@@ -56,16 +56,16 @@ export default function Lobby({
       </button>
 
       <div className="card text-center">
-        <h2 style={{ color: "var(--text-secondary)", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: 1 }}>
+        <span className="bracket-label">
           {game.source_type === "youtube" ? "YouTube" : "TV Show"}
-        </h2>
-        <h1 style={{ fontSize: "1.5rem" }}>{game.source_name}</h1>
+        </span>
+        <h1 style={{ fontSize: "1.5rem", marginTop: 6 }}>{game.source_name}</h1>
         <span
           style={{
             display: "inline-block",
             background:
-              game.status === "active" ? "var(--success)" : "var(--accent)",
-            color: "white",
+              game.status === "active" ? "var(--success)" : "var(--sage-500)",
+            color: "var(--sage-50)",
             borderRadius: 20,
             padding: "4px 14px",
             fontSize: "0.8rem",
@@ -121,7 +121,7 @@ export default function Lobby({
                   width: 32,
                   height: 32,
                   borderRadius: "50%",
-                  background: "var(--primary)",
+                  background: "var(--sage-600)",
                   color: "white",
                   display: "flex",
                   alignItems: "center",
@@ -151,6 +151,16 @@ export default function Lobby({
           onClick={handleStart}
         >
           Start Game
+        </button>
+      )}
+
+      {currentPlayer && (game.status === "active" || game.status === "finished") && (
+        <button
+          className="btn-primary btn-large mt-6"
+          style={{ width: "100%" }}
+          onClick={onStart}
+        >
+          Go to Board
         </button>
       )}
     </div>

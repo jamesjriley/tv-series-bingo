@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from backend.models import GameCreate, PlayerJoin
-from backend.services import game_service
+from backend.services import game_service, telegram
 
 router = APIRouter(prefix="/api/games", tags=["games"])
 
@@ -36,4 +36,9 @@ async def join_game(game_id: str, body: PlayerJoin):
 @router.post("/{game_id}/start")
 async def start_game(game_id: str):
     await game_service.start_game(game_id)
+    game = await game_service.get_game(game_id)
+    if game:
+        await telegram.notify_game_started(
+            game["source_name"], game["source_type"], game["player_count"]
+        )
     return {"ok": True}

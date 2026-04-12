@@ -1,26 +1,51 @@
-:root {
-  --bg: #f8f9fc;
-  --surface: #ffffff;
-  --primary: #4f6df5;
-  --primary-hover: #3b56d4;
-  --accent: #f59e42;
-  --success: #34c759;
-  --danger: #ef4444;
-  --text: #1e293b;
-  --text-secondary: #64748b;
-  --border: #e2e8f0;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.1);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&family=JetBrains+Mono:wght@700;800&display=swap');
 
-  /* Bingo square difficulty colours */
-  --easy: #dcfce7;
-  --medium: #fef9c3;
-  --hard: #fee2e2;
-  --marked: #4f6df5;
-  --marked-text: #ffffff;
-  --free: #e0e7ff;
+:root {
+  /* VUT Sage Green palette */
+  --sage-50: #f6f7f4;
+  --sage-100: #e8ebe3;
+  --sage-200: #d4d9cb;
+  --sage-300: #b5bda8;
+  --sage-400: #96a085;
+  --sage-500: #7a866b;
+  --sage-600: #606b53;
+  --sage-700: #4c5543;
+  --sage-800: #3f4638;
+  --sage-900: #363b30;
+  --sage-950: #1c1f18;
+
+  /* Warm neutrals */
+  --warm-50: #faf9f7;
+  --warm-100: #f2f0ec;
+  --warm-200: #e5e1d9;
+
+  /* Brand */
+  --brand: #606b53;
+  --brand-light: #96a085;
+  --brand-dark: #363b30;
+
+  /* Semantic tokens */
+  --bg: var(--warm-50);
+  --surface: #ffffff;
+  --primary: var(--brand);
+  --primary-hover: var(--brand-dark);
+  --success: #4a7c59;
+  --danger: #a04040;
+  --text: var(--sage-950);
+  --text-secondary: var(--sage-500);
+  --border: var(--sage-200);
+  --radius: 4px;
+  --radius-sm: 4px;
+  --shadow: 0 1px 4px rgba(28, 31, 24, 0.06);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Bingo square difficulty colours — sage-tinted */
+  --easy: var(--sage-100);
+  --medium: var(--warm-100);
+  --hard: #e8d8d0;
+  --marked: var(--sage-800);
+  --marked-text: var(--sage-50);
+  --free: var(--sage-200);
 }
 
 * {
@@ -31,16 +56,32 @@
 
 html {
   font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.7;
   min-height: 100dvh;
+}
+
+/* Subtle grid overlay like VUT site */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image:
+    linear-gradient(var(--sage-500) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sage-500) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.04;
+  mix-blend-mode: soft-light;
 }
 
 #root {
@@ -49,15 +90,40 @@ body {
   flex-direction: column;
 }
 
+/* Typography — match VUT */
+h1, h2, h3, h4 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--sage-950);
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+p {
+  line-height: 1.7;
+  color: var(--sage-800);
+}
+
+/* Buttons — match VUT */
 button {
   font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   padding: 12px 24px;
-  font-weight: 600;
-  transition: background-color 0.15s, transform 0.1s;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s, color 0.2s ease;
   touch-action: manipulation;
 }
 
@@ -66,77 +132,100 @@ button:active {
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--brand);
   color: white;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
+  background: var(--brand-dark);
 }
 
 .btn-secondary {
   background: var(--surface);
-  color: var(--text);
-  border: 2px solid var(--border);
+  color: var(--sage-700);
+  border: 1px solid var(--sage-300);
 }
 
 .btn-secondary:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--sage-500);
+  color: var(--sage-950);
 }
 
 .btn-large {
-  padding: 16px 32px;
-  font-size: 1.125rem;
+  padding: 14px 32px;
+  font-size: 1.1rem;
   border-radius: var(--radius);
 }
 
+/* Inputs */
 input,
 textarea {
   font-family: inherit;
   font-size: 1rem;
   padding: 12px 16px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--sage-300);
+  border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   width: 100%;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s ease;
 }
 
 input:focus,
 textarea:focus {
-  border-color: var(--primary);
+  border-color: var(--brand);
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
+/* Layout */
 .page {
   flex: 1;
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px 16px;
+  padding: 24px 16px;
   width: 100%;
 }
 
+/* Cards — match VUT */
 .card {
   background: var(--surface);
+  border: 1px solid var(--sage-200);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 24px;
   box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-h1 {
-  font-size: 1.75rem;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Bracket motif — VUT signature */
+.bracket-label {
+  font-family: "JetBrains Mono", monospace;
   font-weight: 700;
-  margin-bottom: 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sage-500);
 }
 
-h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
+.bracket-label::before {
+  content: "[[ ";
+  color: var(--brand-light);
 }
 
+.bracket-label::after {
+  content: " ]]";
+  color: var(--brand-light);
+}
+
+/* Utilities */
 .text-secondary {
   color: var(--text-secondary);
 }
@@ -166,8 +255,8 @@ h2 {
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--border);
-  border-top-color: var(--primary);
+  border: 3px solid var(--sage-200);
+  border-top-color: var(--brand);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 20px auto;
@@ -181,6 +270,13 @@ h2 {
 
 @keyframes pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  50% { transform: scale(1.08); }
   100% { transform: scale(1); }
+}
+
+/* Focus-visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 2px;
 }

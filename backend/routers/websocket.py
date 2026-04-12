@@ -2,7 +2,7 @@ import json
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from backend.services import card_builder, bingo_checker, game_service
+from backend.services import card_builder, bingo_checker, game_service, telegram
 
 router = APIRouter()
 
@@ -66,8 +66,10 @@ async def websocket_endpoint(ws: WebSocket, game_id: str, player_id: str):
                     "type": "square_toggled",
                     "data": {
                         "player_id": result["player_id"],
+                        "player_name": result["player_name"],
                         "square_id": result["id"],
                         "marked": result["marked"],
+                        "moment_text": result["moment_text"],
                     },
                 })
 
@@ -82,6 +84,15 @@ async def websocket_endpoint(ws: WebSocket, game_id: str, player_id: str):
                             "winning_line": winning_line,
                         },
                     })
+                    # Telegram notification
+                    game = await game_service.get_game(game_id)
+                    progress = await bingo_checker.get_player_progress(game_id)
+                    winner_name = next(
+                        (p["name"] for p in progress if p["id"] == result["player_id"]),
+                        "Someone",
+                    )
+                    if game:
+                        await telegram.notify_bingo_winner(game["source_name"], winner_name)
 
                 # Send updated progress
                 progress = await bingo_checker.get_player_progress(game_id)

@@ -17,6 +17,7 @@ def extract_video_id(url: str) -> str | None:
 
 def fetch_transcripts(video_urls: list[str]) -> str:
     all_text = []
+    ytt = YouTubeTranscriptApi()
 
     for url in video_urls:
         video_id = extract_video_id(url)
@@ -24,8 +25,8 @@ def fetch_transcripts(video_urls: list[str]) -> str:
             continue
 
         try:
-            transcript = YouTubeTranscriptApi.get_transcript(video_id)
-            text = " ".join(entry["text"] for entry in transcript)
+            transcript = ytt.fetch(video_id)
+            text = " ".join(snippet.text for snippet in transcript)
             all_text.append(f"--- Video {video_id} ---\n{text}")
         except Exception:
             # Skip videos without available transcripts

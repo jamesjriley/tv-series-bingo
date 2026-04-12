@@ -49,14 +49,18 @@ def _pick_moments(moments: list[dict]) -> list[dict]:
 async def build_card(player_id: str, game_id: str) -> list[dict]:
     db = await get_db()
     try:
-        # Check if card already exists
+        # Check if a complete card already exists (25 squares with moments assigned)
         cursor = await db.execute(
-            "SELECT COUNT(*) as cnt FROM card_squares WHERE player_id = ?",
+            "SELECT COUNT(*) as cnt FROM card_squares WHERE player_id = ? AND (moment_id IS NOT NULL OR is_free = 1)",
             (player_id,),
         )
         row = await cursor.fetchone()
-        if row["cnt"] > 0:
+        if row["cnt"] == GRID_SIZE:
             return await get_card(player_id)
+
+        # Clear everything and rebuild from scratch
+        await db.execute("DELETE FROM card_squares WHERE player_id = ?", (player_id,))
+        await db.commit()
 
         # Fetch moments for this game
         cursor = await db.execute(
@@ -147,7 +151,12 @@ async def toggle_square(square_id: str) -> dict | None:
     db = await get_db()
     try:
         cursor = await db.execute(
-            "SELECT * FROM card_squares WHERE id = ?", (square_id,)
+            """SELECT cs.*, m.text as moment_text, p.name as player_name
+               FROM card_squares cs
+               LEFT JOIN moments m ON m.id = cs.moment_id
+               LEFT JOIN players p ON p.id = cs.player_id
+               WHERE cs.id = ?""",
+            (square_id,),
         )
         sq = await cursor.fetchone()
         if not sq or sq["is_free"]:
@@ -159,6 +168,12 @@ async def toggle_square(square_id: str) -> dict | None:
             (new_marked, square_id),
         )
         await db.commit()
-        return {"id": square_id, "marked": bool(new_marked), "player_id": sq["player_id"]}
+        return {
+            "id": square_id,
+            "marked": bool(new_marked),
+            "player_id": sq["player_id"],
+            "player_name": sq["player_name"],
+            "moment_text": sq["moment_text"],
+        }
     finally:
         await db.close()
