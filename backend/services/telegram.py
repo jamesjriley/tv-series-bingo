@@ -13,7 +13,7 @@ async def notify_game_started(source_name: str, source_type: str, player_count: 
     join_line = "Join from any device on the WiFi."
     if settings.base_url and game_id:
         link = f"{settings.base_url.rstrip('/')}/game/{game_id}"
-        join_line = f'<a href="{link}">Join the game</a>'
+        join_line = f"<b>Join the game:</b>\n{link}"
 
     text = (
         f"📺 <b>[[ TV Bingo ]]</b>\n\n"
