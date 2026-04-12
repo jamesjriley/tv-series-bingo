@@ -5,6 +5,7 @@ import type { Game, Player } from "../types/game";
 interface Props {
   gameId: string;
   currentPlayer: Player | null;
+  savedName: string;
   onJoined: (player: Player) => void;
   onStart: () => void;
   onBack: () => void;
@@ -13,12 +14,14 @@ interface Props {
 export default function Lobby({
   gameId,
   currentPlayer,
+  savedName,
   onJoined,
   onStart,
   onBack,
 }: Props) {
   const [game, setGame] = useState<Game | null>(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(savedName);
+  const [editing, setEditing] = useState(!savedName);
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState("");
 
@@ -29,19 +32,23 @@ export default function Lobby({
     return () => clearInterval(interval);
   }, [gameId]);
 
-  const handleJoin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
+  const doJoin = async (joinName: string) => {
+    if (!joinName.trim()) return;
     setJoining(true);
     setError("");
     try {
-      const player = await joinGame(gameId, name.trim());
+      const player = await joinGame(gameId, joinName.trim());
       onJoined(player);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to join game");
     } finally {
       setJoining(false);
     }
+  };
+
+  const handleJoin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    doJoin(name);
   };
 
   const handleStart = async () => {
@@ -80,30 +87,53 @@ export default function Lobby({
       </div>
 
       {!currentPlayer && (
-        <form onSubmit={handleJoin} className="mt-4 gap-3">
-          <label style={{ fontWeight: 600 }}>Your name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-            maxLength={30}
-            autoFocus
-          />
+        <div className="mt-4 gap-3">
           {error && (
             <p style={{ color: "var(--danger)", fontWeight: 600, fontSize: "0.85rem", margin: 0 }}>
               {error}
             </p>
           )}
-          <button
-            type="submit"
-            className="btn-primary btn-large"
-            disabled={joining || !name.trim()}
-            style={{ width: "100%" }}
-          >
-            {joining ? "Joining..." : "Join Game"}
-          </button>
-        </form>
+
+          {savedName && !editing ? (
+            <>
+              <button
+                className="btn-primary btn-large"
+                disabled={joining}
+                style={{ width: "100%" }}
+                onClick={() => doJoin(savedName)}
+              >
+                {joining ? "Joining..." : `Join as ${savedName}`}
+              </button>
+              <button
+                className="btn-secondary"
+                style={{ width: "100%", marginTop: 8 }}
+                onClick={() => setEditing(true)}
+              >
+                Use a different name
+              </button>
+            </>
+          ) : (
+            <form onSubmit={handleJoin} className="gap-3">
+              <label style={{ fontWeight: 600 }}>Your name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+                maxLength={30}
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="btn-primary btn-large"
+                disabled={joining || !name.trim()}
+                style={{ width: "100%" }}
+              >
+                {joining ? "Joining..." : "Join Game"}
+              </button>
+            </form>
+          )}
+        </div>
       )}
 
       <div className="mt-4">

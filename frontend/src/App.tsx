@@ -10,6 +10,7 @@ import "./styles/global.css";
 type Page = "home" | "create" | "lobby" | "play";
 
 const STORAGE_KEY = "tv-bingo-session";
+const NAME_KEY = "tv-bingo-name";
 
 interface Session {
   gameId: string;
@@ -30,6 +31,16 @@ function saveSession(session: Session | null) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
   } else {
     localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+function loadSavedName(): string {
+  return localStorage.getItem(NAME_KEY) || "";
+}
+
+function saveName(name: string) {
+  if (name.trim()) {
+    localStorage.setItem(NAME_KEY, name.trim());
   }
 }
 
@@ -105,6 +116,7 @@ export default function App() {
   const handleJoined = (player: Player) => {
     setCurrentPlayer(player);
     saveSession({ gameId: selectedGameId!, player });
+    saveName(player.name);
   };
 
   const handleStart = () => {
@@ -144,6 +156,7 @@ export default function App() {
         <Lobby
           gameId={selectedGameId!}
           currentPlayer={currentPlayer}
+          savedName={loadSavedName()}
           onJoined={handleJoined}
           onStart={handleStart}
           onBack={handleBackToHome}
