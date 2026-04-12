@@ -51,6 +51,13 @@ export interface WSMessage {
   data: Record<string, unknown>;
 }
 
+export interface YouTubeChannel {
+  channel_name: string;
+  channel_url: string;
+  channel_id?: string;
+  subscriber_text?: string;
+}
+
 export interface Stats {
   total_games: number;
   active_games: number;

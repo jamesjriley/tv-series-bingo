@@ -96,3 +96,14 @@ export async function getProgress(
 export async function getStats(): Promise<Stats> {
   return fetchJSON(`${BASE}/games/stats`);
 }
+
+export interface YouTubeLookupResult {
+  channel_name?: string;
+  channel_url?: string;
+  videos?: { id: string; title: string; url: string }[];
+  results?: { channel_name: string; channel_url: string; channel_id?: string; subscriber_text?: string }[];
+}
+
+export async function youtubeLookup(query: string): Promise<YouTubeLookupResult> {
+  return fetchJSON(`${BASE}/youtube/lookup?q=${encodeURIComponent(query)}`);
+}

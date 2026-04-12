@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.database import init_db
-from backend.routers import games, moments, cards, websocket
+from backend.routers import games, moments, cards, websocket, youtube
 
 
 @asynccontextmanager
@@ -29,6 +29,7 @@ app.include_router(games.router)
 app.include_router(moments.router)
 app.include_router(cards.router)
 app.include_router(websocket.router)
+app.include_router(youtube.router)
 
 # Serve frontend static files in production with SPA fallback
 dist_path = Path(__file__).parent.parent / "frontend" / "dist"
