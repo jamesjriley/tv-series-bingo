@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { createCard, getCard, getGame } from "../api";
 import { useWebSocket } from "../hooks/useWebSocket";
 import type { Game, Player, CardSquare, WSMessage, PlayerProgress } from "../types/game";
@@ -92,6 +92,21 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
   );
 
   const { send, connected } = useWebSocket(gameId, player.id, handleWS);
+
+  // Resync card from server when WebSocket reconnects (handles dropped marks)
+  const prevConnected = useRef(false);
+  useEffect(() => {
+    if (connected && !prevConnected.current && squares.length > 0) {
+      getCard(gameId, player.id)
+        .then((card) => {
+          if (card.squares?.length > 0) {
+            setSquares(card.squares);
+          }
+        })
+        .catch(() => {});
+    }
+    prevConnected.current = connected;
+  }, [connected, gameId, player.id, squares.length]);
 
   const handleSquareClick = (sq: CardSquare) => {
     if (sq.is_free || winner) return;

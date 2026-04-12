@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import CreateGame from "./pages/CreateGame";
 import Lobby from "./pages/Lobby";
 import GameBoard from "./pages/GameBoard";
+import { getGame } from "./api";
 import type { Game, Player } from "./types/game";
 import "./styles/global.css";
 
@@ -36,14 +37,37 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  const [restoring, setRestoring] = useState(true);
 
-  // Restore session on mount
+  // Restore session on mount — go directly to the game board if valid
   useEffect(() => {
     const session = loadSession();
-    if (session) {
-      setSelectedGameId(session.gameId);
-      setCurrentPlayer(session.player);
+    if (!session) {
+      setRestoring(false);
+      return;
     }
+
+    // Validate the session against the server before restoring
+    getGame(session.gameId)
+      .then((game) => {
+        const stillInGame = game.players.some((p) => p.id === session.player.id);
+        if (stillInGame) {
+          setSelectedGameId(session.gameId);
+          setCurrentPlayer(session.player);
+          if (game.status === "active" || game.status === "finished") {
+            setPage("play");
+          } else {
+            setPage("lobby");
+          }
+        } else {
+          saveSession(null);
+        }
+      })
+      .catch(() => {
+        // Game no longer exists
+        saveSession(null);
+      })
+      .finally(() => setRestoring(false));
   }, []);
 
   const handleSelectGame = (game: Game) => {
@@ -91,6 +115,14 @@ export default function App() {
     setPage("home");
     setSelectedGameId(null);
   };
+
+  if (restoring) {
+    return (
+      <div className="page text-center">
+        <div className="spinner" />
+      </div>
+    );
+  }
 
   switch (page) {
     case "home":

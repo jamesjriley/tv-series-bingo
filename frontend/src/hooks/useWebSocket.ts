@@ -7,16 +7,32 @@ export function useWebSocket(
   onMessage: (msg: WSMessage) => void
 ) {
   const wsRef = useRef<WebSocket | null>(null);
+  const pendingRef = useRef<WSMessage[]>([]);
+  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [connected, setConnected] = useState(false);
 
   const connect = useCallback(() => {
     if (!gameId || !playerId) return;
 
+    // Clean up any existing connection
+    if (wsRef.current) {
+      wsRef.current.onclose = null;
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const url = `${protocol}//${window.location.host}/ws/${gameId}/${playerId}`;
     const ws = new WebSocket(url);
 
-    ws.onopen = () => setConnected(true);
+    ws.onopen = () => {
+      setConnected(true);
+      // Flush any messages queued during reconnect
+      const queued = pendingRef.current.splice(0);
+      for (const msg of queued) {
+        ws.send(JSON.stringify(msg));
+      }
+    };
 
     ws.onmessage = (event) => {
       try {
@@ -29,8 +45,9 @@ export function useWebSocket(
 
     ws.onclose = () => {
       setConnected(false);
+      wsRef.current = null;
       // Reconnect after 2s
-      setTimeout(connect, 2000);
+      reconnectTimer.current = setTimeout(connect, 2000);
     };
 
     wsRef.current = ws;
@@ -38,12 +55,22 @@ export function useWebSocket(
 
   useEffect(() => {
     connect();
-    return () => wsRef.current?.close();
+    return () => {
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      if (wsRef.current) {
+        wsRef.current.onclose = null;
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
   }, [connect]);
 
   const send = useCallback((msg: WSMessage) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(msg));
+    } else {
+      // Queue the message so it's sent when reconnected
+      pendingRef.current.push(msg);
     }
   }, []);
 
