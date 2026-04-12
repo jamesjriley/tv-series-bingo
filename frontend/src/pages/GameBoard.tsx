@@ -85,7 +85,7 @@ export default function GameBoard({ gameId, player, onBack }: Props) {
         setProgress(data.progress);
       } else if (msg.type === "bingo") {
         const data = msg.data as { winner_player_id: string; winning_line: number[] };
-        setWinner(data);
+        setWinner({ player_id: data.winner_player_id, winning_line: data.winning_line });
       }
     },
     [player.id]
