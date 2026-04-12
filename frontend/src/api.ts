@@ -1,4 +1,4 @@
-import type { Game, Card, Player, Moment, PlayerProgress } from "./types/game";
+import type { Game, Card, Player, Moment, PlayerProgress, Stats } from "./types/game";
 
 const BASE = "/api";
 
@@ -91,4 +91,8 @@ export async function getProgress(
   gameId: string
 ): Promise<PlayerProgress[]> {
   return fetchJSON(`${BASE}/games/${gameId}/progress`);
+}
+
+export async function getStats(): Promise<Stats> {
+  return fetchJSON(`${BASE}/games/stats`);
 }

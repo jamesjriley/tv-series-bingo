@@ -50,3 +50,12 @@ export interface WSMessage {
   type: string;
   data: Record<string, unknown>;
 }
+
+export interface Stats {
+  total_games: number;
+  active_games: number;
+  finished_games: number;
+  leaderboard: { name: string; wins: number }[];
+  players: { name: string; games_played: number; total_marks: number }[];
+  recent_finished: { id: string; source_name: string; source_type: string; created_at: string; winner_name: string | null }[];
+}

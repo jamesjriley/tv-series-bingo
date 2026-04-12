@@ -11,6 +11,11 @@ async def list_games():
     return await game_service.list_games()
 
 
+@router.get("/stats")
+async def get_stats():
+    return await game_service.get_stats()
+
+
 @router.post("")
 async def create_game(body: GameCreate):
     game = await game_service.create_game(body.source_type, body.source_name)

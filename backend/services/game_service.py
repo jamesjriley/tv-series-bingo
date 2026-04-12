@@ -147,6 +147,66 @@ async def set_winner(game_id: str, player_id: str):
         await db.close()
 
 
+async def get_stats() -> dict:
+    """Get household statistics across all games."""
+    db = await get_db()
+    try:
+        # Total games by status
+        cursor = await db.execute(
+            "SELECT status, COUNT(*) as cnt FROM games GROUP BY status"
+        )
+        status_counts = {row["status"]: row["cnt"] for row in await cursor.fetchall()}
+
+        # Leaderboard: wins per player name (grouped by name for soft identity)
+        cursor = await db.execute("""
+            SELECT p.name, COUNT(*) as wins
+            FROM games g
+            JOIN players p ON p.id = g.winner_player_id
+            WHERE g.status = 'finished'
+            GROUP BY LOWER(p.name)
+            ORDER BY wins DESC
+            LIMIT 10
+        """)
+        leaderboard = [{"name": row["name"], "wins": row["cnt"]} for row in await cursor.fetchall()]
+
+        # Games played per player name
+        cursor = await db.execute("""
+            SELECT p.name, COUNT(DISTINCT p.game_id) as games_played,
+                   SUM(CASE WHEN cs.marked = 1 AND cs.is_free = 0 THEN 1 ELSE 0 END) as total_marks
+            FROM players p
+            LEFT JOIN card_squares cs ON cs.player_id = p.id
+            GROUP BY LOWER(p.name)
+            ORDER BY games_played DESC
+            LIMIT 10
+        """)
+        players = [
+            {"name": row["name"], "games_played": row["games_played"], "total_marks": row["total_marks"] or 0}
+            for row in await cursor.fetchall()
+        ]
+
+        # Recent finished games
+        cursor = await db.execute("""
+            SELECT g.id, g.source_name, g.source_type, g.created_at, p.name as winner_name
+            FROM games g
+            LEFT JOIN players p ON p.id = g.winner_player_id
+            WHERE g.status = 'finished'
+            ORDER BY g.created_at DESC
+            LIMIT 10
+        """)
+        recent_finished = [dict(row) for row in await cursor.fetchall()]
+
+        return {
+            "total_games": sum(status_counts.values()),
+            "active_games": status_counts.get("active", 0),
+            "finished_games": status_counts.get("finished", 0),
+            "leaderboard": leaderboard,
+            "players": players,
+            "recent_finished": recent_finished,
+        }
+    finally:
+        await db.close()
+
+
 async def delete_game(game_id: str):
     """Delete a game and all its related data (moments, players, cards)."""
     db = await get_db()
