@@ -31,7 +31,7 @@ export default function CreateGame({ onCreated, onBack }: Props) {
   const [resolving, setResolving] = useState(false);
   const [resolvedChannel, setResolvedChannel] = useState<string | null>(null);
 
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef(false);
 
