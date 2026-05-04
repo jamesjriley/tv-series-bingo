@@ -15,7 +15,7 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 **: Commit the 5 in-flight uncommitted files as the first move (Help modal + `?` button, YouTube transcript fallback to name-based generation, logging fixes in `moments.py` and `youtube_service.py`)
 - [x] **POLISH-02
 **: Remove Telegram bot integration entirely — delete `services/telegram.py` callsites, remove `TELEGRAM_*` env vars, drop README references and config
-- [ ] **POLISH-03**: Repo and infra hygiene — `.env` no longer tracked (current and future), `bingo.db*` untracked, `.gitignore` tightened, `.env.example` reflects current required vars (no history rewrite — repo is private)
+- [x] **POLISH-03**: Repo and infra hygiene — `.env` no longer tracked (current and future), `bingo.db*` untracked, `.gitignore` tightened, `.env.example` reflects current required vars (no history rewrite — repo is private)
 
 ### AI
 
@@ -89,9 +89,9 @@ Populated by the roadmapper during phase creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| POLISH-01 | Phase 1 | Pending |
-| POLISH-02 | Phase 1 | Pending |
-| POLISH-03 | Phase 1 | Pending |
+| POLISH-01 | Phase 1 | Complete |
+| POLISH-02 | Phase 1 | Complete |
+| POLISH-03 | Phase 1 | Complete |
 | AI-01 | Phase 2 | Pending |
 | AI-02 | Phase 2 | Pending |
 | APP-01 | Phase 3 | Pending |

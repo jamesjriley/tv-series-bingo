@@ -12,7 +12,7 @@ The app already works and has real users. This milestone plugs the known holes a
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Code Hygiene** - Commit the 5 in-flight files, drop Telegram, and tighten git tracking
+- [x] **Phase 1: Code Hygiene** - Commit the 5 in-flight files, drop Telegram, and tighten git tracking
 - [ ] **Phase 2: AI Provider Flexibility** - Multi-provider AI client (Anthropic + OpenRouter) with config-driven swap
 - [ ] **Phase 3: PWA & Visual Polish** - PWA manifest + service worker + installability, then design-directed UI polish
 - [ ] **Phase 4: Local Analytics** - SQLite events pipeline, 12 instrumented events, admin stats page
@@ -29,11 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Telegram bot code and env vars are gone — no references in services, config, README, or docker-compose
   3. `.env` and `bingo.db*` are untracked by git; `.gitignore` prevents re-addition; `.env.example` reflects current required vars
 **Plans:** 5 plans
-- [ ] 01-01-PLAN.md — Commit 1/5: Help modal (POLISH-01a) — frontend/src/pages/Help.tsx + App.tsx + global.css
-- [ ] 01-02-PLAN.md — Commit 2/5: YouTube transcript fallback + logging (POLISH-01b) — backend/services/youtube_service.py
-- [ ] 01-03-PLAN.md — Commit 3/5: Moments router logging fix (POLISH-01c) — backend/routers/moments.py
-- [ ] 01-04-PLAN.md — Commit 4/5: Telegram excision end-to-end (POLISH-02) — 6 files + .env working-tree strip
-- [ ] 01-05-PLAN.md — Commit 5/5: Repo hygiene (POLISH-03) — idempotent untrack + .gitignore wildcard + frontend/bingo.db deletion + push to origin
+- [x] 01-01-PLAN.md — Commit 1/5: Help modal (POLISH-01a) — frontend/src/pages/Help.tsx + App.tsx + global.css
+- [x] 01-02-PLAN.md — Commit 2/5: YouTube transcript fallback + logging (POLISH-01b) — backend/services/youtube_service.py
+- [x] 01-03-PLAN.md — Commit 3/5: Moments router logging fix (POLISH-01c) — backend/routers/moments.py
+- [x] 01-04-PLAN.md — Commit 4/5: Telegram excision end-to-end (POLISH-02) — 6 files + .env working-tree strip
+- [x] 01-05-PLAN.md — Commit 5/5: Repo hygiene (POLISH-03) — idempotent untrack + .gitignore wildcard + frontend/bingo.db deletion + push to origin
 
 ### Phase 2: AI Provider Flexibility
 **Goal**: Moment generation works with either Anthropic or OpenRouter; provider is swapped via env var with no code changes
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Code Hygiene | 0/5 | Not started | - |
+| 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
 | 2. AI Provider Flexibility | 0/TBD | Not started | - |
 | 3. PWA & Visual Polish | 0/TBD | Not started | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
