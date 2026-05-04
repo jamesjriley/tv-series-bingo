@@ -2,10 +2,10 @@ __pycache__/
 *.pyc
 *.pyo
 venv/
+# secrets — never commit
 .env
-bingo.db
-bingo.db-wal
-bingo.db-shm
+# SQLite DB + WAL/SHM — local data, never commit
+bingo.db*
 node_modules/
 frontend/dist/
 *.log
