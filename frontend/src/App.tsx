@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import CreateGame from "./pages/CreateGame";
 import Lobby from "./pages/Lobby";
 import GameBoard from "./pages/GameBoard";
+import Help from "./pages/Help";
 import { getGame } from "./api";
 import type { Game, Player } from "./types/game";
 import "./styles/global.css";
@@ -72,6 +73,7 @@ export default function App() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [restoring, setRestoring] = useState(true);
+  const [showHelp, setShowHelp] = useState(false);
 
   /** Navigate to a page, updating URL and state */
   const navigate = useCallback((p: Page, gameId?: string | null) => {
@@ -213,23 +215,37 @@ export default function App() {
     );
   }
 
+  const helpButton = (
+    <button
+      className="help-btn"
+      onClick={() => setShowHelp(true)}
+      aria-label="Help"
+      title="How to play"
+    >
+      ?
+    </button>
+  );
+
+  let content;
   switch (page) {
     case "home":
-      return (
+      content = (
         <Home
           onCreateGame={() => navigate("create")}
           onSelectGame={handleSelectGame}
         />
       );
+      break;
     case "create":
-      return (
+      content = (
         <CreateGame
           onCreated={handleGameCreated}
           onBack={handleBackToHome}
         />
       );
+      break;
     case "lobby":
-      return (
+      content = (
         <Lobby
           gameId={selectedGameId!}
           currentPlayer={currentPlayer}
@@ -239,13 +255,23 @@ export default function App() {
           onBack={handleBackToHome}
         />
       );
+      break;
     case "play":
-      return (
+      content = (
         <GameBoard
           gameId={selectedGameId!}
           player={currentPlayer!}
           onBack={handleBackToHome}
         />
       );
+      break;
   }
+
+  return (
+    <>
+      {helpButton}
+      {content}
+      {showHelp && <Help onClose={() => setShowHelp(false)} />}
+    </>
+  );
 }
