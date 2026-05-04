@@ -87,27 +87,27 @@ Populated by the roadmapper during phase creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| POLISH-01 | — | Pending |
-| POLISH-02 | — | Pending |
-| POLISH-03 | — | Pending |
-| AI-01 | — | Pending |
-| AI-02 | — | Pending |
-| APP-01 | — | Pending |
-| APP-02 | — | Pending |
-| APP-03 | — | Pending |
-| APP-04 | — | Pending |
-| ANALYTICS-01 | — | Pending |
-| ANALYTICS-02 | — | Pending |
-| ANALYTICS-03 | — | Pending |
-| TEST-01 | — | Pending |
-| TEST-02 | — | Pending |
-| DEPLOY-01 | — | Pending |
+| POLISH-01 | Phase 1 | Pending |
+| POLISH-02 | Phase 1 | Pending |
+| POLISH-03 | Phase 1 | Pending |
+| AI-01 | Phase 2 | Pending |
+| AI-02 | Phase 2 | Pending |
+| APP-01 | Phase 3 | Pending |
+| APP-02 | Phase 3 | Pending |
+| APP-03 | Phase 3 | Pending |
+| APP-04 | Phase 3 | Pending |
+| ANALYTICS-01 | Phase 4 | Pending |
+| ANALYTICS-02 | Phase 4 | Pending |
+| ANALYTICS-03 | Phase 4 | Pending |
+| TEST-01 | Phase 5 | Pending |
+| TEST-02 | Phase 5 | Pending |
+| DEPLOY-01 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 15 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 15 ⚠️ (will be resolved by roadmapper)
+- Mapped to phases: 15 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-04*
-*Last updated: 2026-05-04 after initial definition*
+*Last updated: 2026-05-04 — traceability populated by roadmapper*
