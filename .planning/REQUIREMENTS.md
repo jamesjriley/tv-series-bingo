@@ -13,7 +13,8 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 
 - [x] **POLISH-01
 **: Commit the 5 in-flight uncommitted files as the first move (Help modal + `?` button, YouTube transcript fallback to name-based generation, logging fixes in `moments.py` and `youtube_service.py`)
-- [ ] **POLISH-02**: Remove Telegram bot integration entirely — delete `services/telegram.py` callsites, remove `TELEGRAM_*` env vars, drop README references and config
+- [x] **POLISH-02
+**: Remove Telegram bot integration entirely — delete `services/telegram.py` callsites, remove `TELEGRAM_*` env vars, drop README references and config
 - [ ] **POLISH-03**: Repo and infra hygiene — `.env` no longer tracked (current and future), `bingo.db*` untracked, `.gitignore` tightened, `.env.example` reflects current required vars (no history rewrite — repo is private)
 
 ### AI
