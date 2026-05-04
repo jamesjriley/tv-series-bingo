@@ -37,4 +37,4 @@ Phase 3's APP-04 (visual polish) depends on Pippa running `/gsd-sketch` to explo
 
 - Branch in flight: `claude/resume-ai-app-ClIA9` (1 commit ahead of origin before this session). Phase 1 commits the 5 uncommitted files as its first move.
 - Existing concerns audit at `.planning/codebase/CONCERNS.md` flagged many issues — v1 addresses the highest-leverage ones (silent failures, fragile YouTube scraping, no tests on critical logic). The rest defer to v2.
-- Telegram bot is being **removed** in Phase 1 (not kept) — silent-fails per audit, no value for in-room family use.
+- Telegram bot has been **removed** in Phase 1 (not kept) — silent-fails per audit, no value for in-room family use.

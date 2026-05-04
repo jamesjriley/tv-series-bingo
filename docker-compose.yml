@@ -10,10 +10,6 @@ services:
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - DATABASE_PATH=/app/data/bingo.db
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - TELEGRAM_GROUP_ID=${TELEGRAM_GROUP_ID}
-      - TELEGRAM_TOPIC_ID=${TELEGRAM_TOPIC_ID}
-      - BASE_URL=${BASE_URL:-https://tv-bingo.aiwhare.com}
     networks:
       - default
 
