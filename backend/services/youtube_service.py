@@ -1,9 +1,12 @@
 import json
+import logging
 import re
 import xml.etree.ElementTree as ET
 
 import httpx
 from youtube_transcript_api import YouTubeTranscriptApi
+
+logger = logging.getLogger(__name__)
 
 _HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0",
@@ -36,8 +39,8 @@ def fetch_transcripts(video_urls: list[str]) -> str:
             transcript = ytt.fetch(video_id)
             text = " ".join(snippet.text for snippet in transcript)
             all_text.append(f"--- Video {video_id} ---\n{text}")
-        except Exception:
-            # Skip videos without available transcripts
+        except Exception as e:
+            logger.warning("Transcript unavailable for %s: %s", video_id, type(e).__name__)
             continue
 
     return "\n\n".join(all_text)
