@@ -89,7 +89,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
-| 2. AI Provider Flexibility | 1/3 | In progress | - |
+| 2. AI Provider Flexibility | 2/3 | In progress | - |
 | 3. PWA & Visual Polish | 0/TBD | Not started | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
 | 5. Tests & Deploy | 0/TBD | Not started | - |

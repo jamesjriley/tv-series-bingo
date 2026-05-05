@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-05-05T09:44:14.995Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-05-05T09:51:52.290Z"
 last_activity: 2026-05-05
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 6
-  percent: 75
+  completed_plans: 7
+  percent: 88
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-04)
 ## Current Position
 
 Phase: 02 (ai-provider-flexibility) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-05-05
 
-Progress: [████████░░] 75%
+Progress: [█████████░] 88%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [████████░░] 75%
 | Phase 01-code-hygiene P04 | 8min | 3 tasks | 6 files |
 | Phase 01-code-hygiene P05 | 4min | 3 tasks | 1 files |
 | Phase 02-ai-provider-flexibility P01 | 10min | 5 tasks | 5 files |
+| Phase 02 P02 | 2min | 4 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,9 @@ Recent decisions affecting current work:
 - Phase 02 P01: AI default model openai/gpt-4o-mini — cheap, native JSON; AI_PROVIDER dropped (D-05)
 - Phase 02 P01: Retry whitelist {408,429,500,502,503,504} + httpx Timeout/Connect/RemoteProtocol; 500ms backoff
 - Phase 02 P01: Logger uses %-format args throughout — secrets-safe, T-02-01 mitigation
+- Phase 02 P02: Spec amendment via GFM strikethrough — D-09 convention established (~~original~~ → **Amended YYYY-MM-DD ...:**)
+- Phase 02 P02: REQUIREMENTS uses 'in Phase 2 discuss'; ROADMAP uses '(Phase 2 discuss)'; PROJECT uses terse '(Phase 2 D-01)' table-cell variant — all verbatim from RESEARCH.md Q7
+- Phase 02 P02: AI-01/AI-02 checkboxes already [x] from PLAN-01's mark-complete — adapted verbatim old_string [Rule 3 auto-fix]; checkbox state preserved as [x] (accurate to shipping reality)
 
 ### Pending Todos
 
@@ -101,8 +105,8 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-05T09:44:14.984Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-05-05T09:51:52.279Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
 
 **Planned Phase:** 2 (AI Provider Flexibility) — 3 plans — 2026-05-05T09:36:12.831Z
