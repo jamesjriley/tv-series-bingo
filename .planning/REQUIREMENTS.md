@@ -19,8 +19,8 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 
 ### AI
 
-- [x] **AI-01**: Provider-agnostic AI client supporting Anthropic *and* OpenRouter for moment generation; same `generate_moments_*` interface, swap behind config
-- [x] **AI-02**: Config-driven provider and model selection via env vars (e.g. `AI_PROVIDER=anthropic|openrouter`, `AI_MODEL=...`) with sensible defaults; surfaced in `.env.example` and README
+- [x] **AI-01**: ~~Provider-agnostic AI client supporting Anthropic *and* OpenRouter for moment generation; same `generate_moments_*` interface, swap behind config~~ → **Amended 2026-05-05 in Phase 2 discuss:** Single-client via OpenRouter for moment generation; Anthropic models stay reachable via `anthropic/*` model prefix on OpenRouter; same `generate_moments_*` interface preserved.
+- [x] **AI-02**: ~~Config-driven provider and model selection via env vars (e.g. `AI_PROVIDER=anthropic|openrouter`, `AI_MODEL=...`) with sensible defaults; surfaced in `.env.example` and README~~ → **Amended 2026-05-05 in Phase 2 discuss:** Config-driven model selection via `AI_MODEL` env var (default `openai/gpt-4o-mini`); `OPENROUTER_API_KEY` required; surfaced in `.env.example` and README. `AI_PROVIDER` dropped — model name embeds the provider on OpenRouter.
 
 ### App Experience
 

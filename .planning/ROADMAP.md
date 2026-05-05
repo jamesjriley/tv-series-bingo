@@ -40,9 +40,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Depends on**: Phase 1
 **Requirements**: AI-01, AI-02
 **Success Criteria** (what must be TRUE):
-  1. Setting `AI_PROVIDER=openrouter` in `.env` routes all moment generation through OpenRouter without code changes
-  2. Setting `AI_PROVIDER=anthropic` (or no setting) routes through Anthropic — existing behaviour preserved
-  3. `.env.example` documents `AI_PROVIDER` and `AI_MODEL` with sensible defaults; README explains the switch
+  1. ~~Setting `AI_PROVIDER=openrouter` in `.env` routes all moment generation through OpenRouter without code changes~~ → **Amended 2026-05-05 (Phase 2 discuss):** With `OPENROUTER_API_KEY` set and `AI_MODEL` unset, moment generation works using the default model (`openai/gpt-4o-mini`).
+  2. ~~Setting `AI_PROVIDER=anthropic` (or no setting) routes through Anthropic — existing behaviour preserved~~ → **Amended 2026-05-05 (Phase 2 discuss):** Setting `AI_MODEL=anthropic/claude-haiku-4.5` (or any OpenRouter model string) routes moment generation through that model with no code changes.
+  3. ~~`.env.example` documents `AI_PROVIDER` and `AI_MODEL` with sensible defaults; README explains the switch~~ → **Amended 2026-05-05 (Phase 2 discuss):** `.env.example` documents `OPENROUTER_API_KEY` (required) and `AI_MODEL` (optional, default shown). Root `README.md` explains the model switch and lists example values including free models (e.g. `meta-llama/llama-3.3-70b-instruct:free`).
 **Plans:** 3 plans
 - [x] 02-01-PLAN.md — Code swap: moment_generator.py → OpenRouter httpx; config + requirements + .env.example + docker-compose
 - [ ] 02-02-PLAN.md — Spec amendments: strikethrough patches on REQUIREMENTS.md AI-01/AI-02 + ROADMAP Phase 2 success criteria + PROJECT.md Key Decisions row

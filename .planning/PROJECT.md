@@ -83,7 +83,7 @@ A multiplayer bingo web app for TV shows and YouTube content: pick a show or cha
 | Two-milestone program (v1 polish → v2 ideal architecture) | Ship something real to family now; let v1 analytics shape v2 | — Pending |
 | Drop Telegram bot | Silent-fails per audit; no value for in-room family use; reduces secrets/setup burden | ✓ Good |
 | Local SQLite analytics over PostHog Cloud (or self-host) | Per Suki's brief: proportionate to scale, privacy-clean for family users, owns data for v2 learnings | ✓ Good |
-| Multi-provider AI (Anthropic + OpenRouter) | Cost flexibility, no single-vendor lock-in, easy config-driven switch | — Pending |
+| Multi-provider AI (Anthropic + OpenRouter) | Cost flexibility, no single-vendor lock-in, easy config-driven switch | — Pending → Refined 2026-05-05 to OpenRouter-only with model-level provider routing (Phase 2 D-01). |
 | PWA over native or browser-only | "Drop to desktop, feels like an app" without app-store overhead | — Pending |
 | UI direction via Pippa's Claude-driven sketch exploration | Pippa explores the look/feel via `/gsd-sketch` upstream; sketch findings feed the UI polish phase with concrete design intent | — Pending |
 | Internal-only deployment for v1 (no public release) | Pet project, family users, kainga-core hosting; revisit public release as a future milestone | — Pending |
