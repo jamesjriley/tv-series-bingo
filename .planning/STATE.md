@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-05-05T09:51:52.290Z"
+status: verifying
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-05-05T09:57:28.918Z"
 last_activity: 2026-05-05
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 7
-  percent: 88
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-05-04)
 
 Phase: 02 (ai-provider-flexibility) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-05-05
 
-Progress: [█████████░] 88%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Progress: [█████████░] 88%
 | Phase 01-code-hygiene P05 | 4min | 3 tasks | 1 files |
 | Phase 02-ai-provider-flexibility P01 | 10min | 5 tasks | 5 files |
 | Phase 02 P02 | 2min | 4 tasks | 3 files |
+| Phase 02-ai-provider-flexibility P02-03 | 3min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,10 @@ Recent decisions affecting current work:
 - Phase 02 P02: Spec amendment via GFM strikethrough — D-09 convention established (~~original~~ → **Amended YYYY-MM-DD ...:**)
 - Phase 02 P02: REQUIREMENTS uses 'in Phase 2 discuss'; ROADMAP uses '(Phase 2 discuss)'; PROJECT uses terse '(Phase 2 D-01)' table-cell variant — all verbatim from RESEARCH.md Q7
 - Phase 02 P02: AI-01/AI-02 checkboxes already [x] from PLAN-01's mark-complete — adapted verbatim old_string [Rule 3 auto-fix]; checkbox state preserved as [x] (accurate to shipping reality)
+- Phase 02 P03: First root README — single canonical onboarding doc; family-only / kainga-core / not-public framing per CLAUDE.md hard constraints
+- Phase 02 P03: README documents OpenRouter env contract (OPENROUTER_API_KEY + AI_MODEL) with 4 model examples including $0/month :free variant
+- Phase 02 P03: Privacy section explicit per D-10 — prompts egress to OpenRouter + upstream provider, default 30-day logging, otherwise data stays on kainga-core
+- Phase 02 P03: Deploy section structurally extensible per D-08 — Phase 5 / DEPLOY-01 extends rather than rewrites
 
 ### Pending Todos
 
@@ -105,8 +110,8 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-05T09:51:52.279Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-05-05T09:57:28.907Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
 
 **Planned Phase:** 2 (AI Provider Flexibility) — 3 plans — 2026-05-05T09:36:12.831Z

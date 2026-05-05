@@ -45,8 +45,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. ~~`.env.example` documents `AI_PROVIDER` and `AI_MODEL` with sensible defaults; README explains the switch~~ → **Amended 2026-05-05 (Phase 2 discuss):** `.env.example` documents `OPENROUTER_API_KEY` (required) and `AI_MODEL` (optional, default shown). Root `README.md` explains the model switch and lists example values including free models (e.g. `meta-llama/llama-3.3-70b-instruct:free`).
 **Plans:** 3 plans
 - [x] 02-01-PLAN.md — Code swap: moment_generator.py → OpenRouter httpx; config + requirements + .env.example + docker-compose
-- [ ] 02-02-PLAN.md — Spec amendments: strikethrough patches on REQUIREMENTS.md AI-01/AI-02 + ROADMAP Phase 2 success criteria + PROJECT.md Key Decisions row
-- [ ] 02-03-PLAN.md — Root README.md: env contract, model switch, kainga-core deploy notes per D-08
+- [x] 02-02-PLAN.md — Spec amendments: strikethrough patches on REQUIREMENTS.md AI-01/AI-02 + ROADMAP Phase 2 success criteria + PROJECT.md Key Decisions row
+- [x] 02-03-PLAN.md — Root README.md: env contract, model switch, kainga-core deploy notes per D-08
 
 ### Phase 3: PWA & Visual Polish
 **Goal**: Users can install the app to their desktop and tap it open like an app; the interface looks and feels polished
@@ -89,7 +89,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
-| 2. AI Provider Flexibility | 2/3 | In progress | - |
+| 2. AI Provider Flexibility | 3/3 | Complete | 2026-05-05 |
 | 3. PWA & Visual Polish | 0/TBD | Not started | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
 | 5. Tests & Deploy | 0/TBD | Not started | - |
