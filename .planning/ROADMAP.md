@@ -56,9 +56,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Chromium shows an "Install app" prompt; clicking it adds the bingo game to the desktop as a standalone window
   2. Safari on iOS shows "Add to Home Screen"; the installed app launches without browser chrome
   3. Installed app loads correctly offline for the SPA shell; API calls attempt network (no offline gameplay required)
-  4. The visual design reflects the directions from Pippa's /gsd-sketch exploration — updated colours, typography, and component styles are applied
-**Plans**: TBD
-**UI hint**: yes
+  4. The visual design reflects the directions from Pippa's /gsd-sketch exploration — updated colours, typography, and component styles are applied *(moves to Phase 3.1 per D-12; Phase 3 verifies on criteria #1–#3 only)*
+**Plans:** 2 plans
+- [ ] 03-01-assets-PLAN.md — Tooling & assets: install vite-plugin-pwa + @vite-pwa/assets-generator, generate PNG/ICO icons from favicon.svg, delete icons.svg sprite, gitignore dev-dist
+- [ ] 03-02-wiring-PLAN.md — PWA wiring: VitePWA plugin in vite.config.ts, registerSW in main.tsx, theme-color meta tag update, tsconfig type shim, README PWA install paragraph
 
 ### Phase 4: Local Analytics
 **Goal**: Usage data is captured locally in SQLite and visible on an admin stats page — no third-party services
@@ -90,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
 | 2. AI Provider Flexibility | 3/3 | Complete | 2026-05-05 |
-| 3. PWA & Visual Polish | 0/TBD | Not started | - |
+| 3. PWA & Visual Polish | 0/2 | Not started | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
 | 5. Tests & Deploy | 0/TBD | Not started | - |
