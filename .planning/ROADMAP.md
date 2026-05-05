@@ -43,7 +43,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Setting `AI_PROVIDER=openrouter` in `.env` routes all moment generation through OpenRouter without code changes
   2. Setting `AI_PROVIDER=anthropic` (or no setting) routes through Anthropic — existing behaviour preserved
   3. `.env.example` documents `AI_PROVIDER` and `AI_MODEL` with sensible defaults; README explains the switch
-**Plans**: TBD
+**Plans:** 3 plans
+- [ ] 02-01-PLAN.md — Code swap: moment_generator.py → OpenRouter httpx; config + requirements + .env.example + docker-compose
+- [ ] 02-02-PLAN.md — Spec amendments: strikethrough patches on REQUIREMENTS.md AI-01/AI-02 + ROADMAP Phase 2 success criteria + PROJECT.md Key Decisions row
+- [ ] 02-03-PLAN.md — Root README.md: env contract, model switch, kainga-core deploy notes per D-08
 
 ### Phase 3: PWA & Visual Polish
 **Goal**: Users can install the app to their desktop and tap it open like an app; the interface looks and feels polished
