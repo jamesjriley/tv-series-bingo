@@ -19,8 +19,8 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 
 ### AI
 
-- [ ] **AI-01**: Provider-agnostic AI client supporting Anthropic *and* OpenRouter for moment generation; same `generate_moments_*` interface, swap behind config
-- [ ] **AI-02**: Config-driven provider and model selection via env vars (e.g. `AI_PROVIDER=anthropic|openrouter`, `AI_MODEL=...`) with sensible defaults; surfaced in `.env.example` and README
+- [x] **AI-01**: Provider-agnostic AI client supporting Anthropic *and* OpenRouter for moment generation; same `generate_moments_*` interface, swap behind config
+- [x] **AI-02**: Config-driven provider and model selection via env vars (e.g. `AI_PROVIDER=anthropic|openrouter`, `AI_MODEL=...`) with sensible defaults; surfaced in `.env.example` and README
 
 ### App Experience
 

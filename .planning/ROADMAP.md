@@ -44,7 +44,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Setting `AI_PROVIDER=anthropic` (or no setting) routes through Anthropic — existing behaviour preserved
   3. `.env.example` documents `AI_PROVIDER` and `AI_MODEL` with sensible defaults; README explains the switch
 **Plans:** 3 plans
-- [ ] 02-01-PLAN.md — Code swap: moment_generator.py → OpenRouter httpx; config + requirements + .env.example + docker-compose
+- [x] 02-01-PLAN.md — Code swap: moment_generator.py → OpenRouter httpx; config + requirements + .env.example + docker-compose
 - [ ] 02-02-PLAN.md — Spec amendments: strikethrough patches on REQUIREMENTS.md AI-01/AI-02 + ROADMAP Phase 2 success criteria + PROJECT.md Key Decisions row
 - [ ] 02-03-PLAN.md — Root README.md: env contract, model switch, kainga-core deploy notes per D-08
 
@@ -89,7 +89,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
-| 2. AI Provider Flexibility | 0/TBD | Not started | - |
+| 2. AI Provider Flexibility | 1/3 | In progress | - |
 | 3. PWA & Visual Polish | 0/TBD | Not started | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
 | 5. Tests & Deploy | 0/TBD | Not started | - |

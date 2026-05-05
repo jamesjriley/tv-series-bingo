@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-05-05T09:36:12.841Z"
-last_activity: 2026-05-04
+status: executing
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-05-05T09:44:14.995Z"
+last_activity: 2026-05-05
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
-  percent: 63
+  completed_plans: 6
+  percent: 75
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-04)
 
 **Core value:** It works for Mum and Gordie when they want to play, on the show they want to play with — fast, relevant, doesn't break mid-show, installable to the desktop like an app.
-**Current focus:** Phase 01 — code-hygiene — COMPLETE. Next: Phase 02 — AI Provider Flexibility
+**Current focus:** Phase 02 — ai-provider-flexibility
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-05-04
+Phase: 02 (ai-provider-flexibility) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-05-05
 
-Progress: [██████████] 100% (Phase 1)
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Progress: [██████████] 100% (Phase 1)
 | Phase 01-code-hygiene P03 | 5min | 2 tasks | 1 files |
 | Phase 01-code-hygiene P04 | 8min | 3 tasks | 6 files |
 | Phase 01-code-hygiene P05 | 4min | 3 tasks | 1 files |
+| Phase 02-ai-provider-flexibility P01 | 10min | 5 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,10 @@ Recent decisions affecting current work:
 - git rm --cached --ignore-unmatch was a no-op: .env and bingo.db* were never tracked (CONCERNS.md stale)
 - gitignore inline # comments not supported by git — comments placed on preceding lines instead
 - Phase 1 complete: all 5 D-14 commits on claude/resume-ai-app-ClIA9, pushed to origin
+- Phase 02 P01: OpenRouter-only via httpx (no openai SDK) — lighter, project already uses httpx
+- Phase 02 P01: AI default model openai/gpt-4o-mini — cheap, native JSON; AI_PROVIDER dropped (D-05)
+- Phase 02 P01: Retry whitelist {408,429,500,502,503,504} + httpx Timeout/Connect/RemoteProtocol; 500ms backoff
+- Phase 02 P01: Logger uses %-format args throughout — secrets-safe, T-02-01 mitigation
 
 ### Pending Todos
 
@@ -96,9 +101,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: --stopped-at
-Stopped at: Phase 2 context gathered
-Resume file: --resume-file
+Last session: 2026-05-05T09:44:14.984Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
 
 **Planned Phase:** 2 (AI Provider Flexibility) — 3 plans — 2026-05-05T09:36:12.831Z
 **Next:** Phase 2 (AI Provider Flexibility) — run /gsd-plan-phase 2 to plan, then /gsd-execute-phase 2
