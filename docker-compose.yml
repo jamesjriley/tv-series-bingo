@@ -8,7 +8,8 @@ services:
     volumes:
       - bingo-data:/app/data
     environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - AI_MODEL=${AI_MODEL:-openai/gpt-4o-mini}
       - DATABASE_PATH=/app/data/bingo.db
     networks:
       - default
