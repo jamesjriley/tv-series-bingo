@@ -13,7 +13,7 @@ The app already works and has real users. This milestone plugs the known holes a
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Code Hygiene** - Commit the 5 in-flight files, drop Telegram, and tighten git tracking
-- [ ] **Phase 2: AI Provider Flexibility** - Multi-provider AI client (Anthropic + OpenRouter) with config-driven swap
+- [x] **Phase 2: AI Provider Flexibility** - Multi-provider AI client (Anthropic + OpenRouter) with config-driven swap (completed 2026-05-05)
 - [ ] **Phase 3: PWA & Visual Polish** - PWA manifest + service worker + installability, then design-directed UI polish
 - [ ] **Phase 4: Local Analytics** - SQLite events pipeline, 12 instrumented events, admin stats page
 - [ ] **Phase 5: Tests & Deploy** - Pytest coverage for bingo_checker and card_builder, then deploy to kainga-core

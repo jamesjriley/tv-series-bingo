@@ -8,7 +8,7 @@ last_updated: "2026-05-05T09:57:28.918Z"
 last_activity: 2026-05-05
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 2
   total_plans: 8
   completed_plans: 8
   percent: 60
@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-04)
 
 **Core value:** It works for Mum and Gordie when they want to play, on the show they want to play with — fast, relevant, doesn't break mid-show, installable to the desktop like an app.
-**Current focus:** Phase 02 — ai-provider-flexibility
+**Current focus:** Phase 02 — ai-provider-flexibility — COMPLETE. Next: Phase 3 — PWA & Visual Polish (UAT items in 02-HUMAN-UAT.md pending live OpenRouter smoke tests)
 
 ## Current Position
 

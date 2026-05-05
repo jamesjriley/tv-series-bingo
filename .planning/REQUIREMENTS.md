@@ -92,8 +92,8 @@ Populated by the roadmapper during phase creation.
 | POLISH-01 | Phase 1 | Complete |
 | POLISH-02 | Phase 1 | Complete |
 | POLISH-03 | Phase 1 | Complete |
-| AI-01 | Phase 2 | Pending |
-| AI-02 | Phase 2 | Pending |
+| AI-01 | Phase 2 | Complete |
+| AI-02 | Phase 2 | Complete |
 | APP-01 | Phase 3 | Pending |
 | APP-02 | Phase 3 | Pending |
 | APP-03 | Phase 3 | Pending |

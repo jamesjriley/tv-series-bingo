@@ -25,14 +25,15 @@ A multiplayer bingo web app for TV shows and YouTube content: pick a show or cha
 - ✓ **Session persistence** — player name + game ID survive page refresh via localStorage — existing
 - ✓ **Game history & stats** — leaderboard, games played, basic stats endpoint — existing
 - ✓ **SQLite persistence** — aiosqlite + WAL mode, schema auto-init on startup — existing
+- ✓ **OpenRouter-routed AI moment generation** — `OPENROUTER_API_KEY` + `AI_MODEL` env contract; default `openai/gpt-4o-mini`, swappable with no code changes — Validated in Phase 2
 
 ### Active
 
 <!-- v1 milestone: Polish & ship to Mum and Gordie -->
 
-- [ ] **Land in-flight polish** — commit the 5 uncommitted files (Help modal + ?-button, YouTube transcript fallback to name-based generation, logging fixes in moments.py and youtube_service.py)
-- [ ] **Drop Telegram bot** — remove notification code paths, env vars, README references; silent-fails per audit and no value for in-room family use
-- [ ] **Multi-provider AI** — config-selectable between Anthropic and OpenRouter; preserves cost flexibility and removes single-vendor dependency
+- [x] **Land in-flight polish** — commit the 5 uncommitted files (Help modal + ?-button, YouTube transcript fallback to name-based generation, logging fixes in moments.py and youtube_service.py) — Validated in Phase 1
+- [x] **Drop Telegram bot** — remove notification code paths, env vars, README references; silent-fails per audit and no value for in-room family use — Validated in Phase 1
+- [x] **Multi-provider AI** — ~~config-selectable between Anthropic and OpenRouter~~ → **Refined 2026-05-05 (Phase 2 D-01):** OpenRouter-only single-client with model-level provider routing via `AI_MODEL` env var — Validated in Phase 2
 - [ ] **PWA conversion** — manifest, app icons, basic service worker, installable to desktop; users tap an app, not a browser tab
 - [ ] **UI freshen-up** — small visual polish pass; design direction driven by Pippa's `/gsd-sketch` exploration (separate upstream activity, output feeds the UI phase)
 - [ ] **Local-only analytics** — SQLite `events` table + `/stats` admin page + thin `track()` wrapper, ~12 events, server-side WebSocket events included; no third-party SDKs
