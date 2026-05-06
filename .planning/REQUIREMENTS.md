@@ -104,8 +104,8 @@ Populated by the roadmapper during phase creation.
 | ANALYTICS-01 | Phase 4 | Pending |
 | ANALYTICS-02 | Phase 4 | Pending |
 | ANALYTICS-03 | Phase 4 | Pending |
-| TEST-01 | Phase 5 | Pending |
-| TEST-02 | Phase 5 | Pending |
+| TEST-01 | Phase 6 | Pending |
+| TEST-02 | Phase 6 | Pending |
 | DEPLOY-01 | Phase 5 | Pending |
 
 **Coverage:**
@@ -113,6 +113,8 @@ Populated by the roadmapper during phase creation.
 - Mapped to phases: 15 ✓
 - Unmapped: 0
 
+**Phase 5/6 split (2026-05-06):** Original Phase 5 bundled DEPLOY-01 + TEST-01 + TEST-02. Pippa elected to deploy ahead of writing tests so the family can use the installed app and so 4 deferred Phase 3 PWA-install UAT items can close. TEST-01/02 remapped to a new Phase 6.
+
 ---
 *Requirements defined: 2026-05-04*
-*Last updated: 2026-05-04 — traceability populated by roadmapper*
+*Last updated: 2026-05-06 — TEST-01/02 remapped to Phase 6 per roadmap split*

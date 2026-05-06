@@ -2,7 +2,9 @@
 
 ## Overview
 
-The app already works and has real users. This milestone plugs the known holes and ships something Mum and Gordie can install to their desktop and tap open like an app. Five phases: clean the working tree and remove dead code, add AI provider flexibility, convert to a PWA with a visual freshen-up, wire local analytics, then validate the fragile bits and deploy to kainga-core.
+The app already works and has real users. This milestone plugs the known holes and ships something Mum and Gordie can install to their desktop and tap open like an app. Six phases: clean the working tree and remove dead code, add AI provider flexibility, convert to a PWA with a visual freshen-up, wire local analytics, deploy to kainga-core for family use, then validate the fragile bits with pytest coverage.
+
+**Phase 5/6 split (decided 2026-05-06):** The original Phase 5 bundled DEPLOY-01 with TEST-01 and TEST-02. After Phase 3 UAT surfaced four PWA-install tests deferred to a real HTTPS deployment, Pippa elected to deploy ahead of writing tests so the family can actually start using the installed app and so the deferred PWA verification can close. Phase 5 now scopes to DEPLOY-01 only; TEST-01/02 move to Phase 6.
 
 ## Phases
 
@@ -16,7 +18,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: AI Provider Flexibility** - Multi-provider AI client (Anthropic + OpenRouter) with config-driven swap (completed 2026-05-05)
 - [ ] **Phase 3: PWA & Visual Polish** - PWA manifest + service worker + installability, then design-directed UI polish
 - [ ] **Phase 4: Local Analytics** - SQLite events pipeline, 12 instrumented events, admin stats page
-- [ ] **Phase 5: Tests & Deploy** - Pytest coverage for bingo_checker and card_builder, then deploy to kainga-core
+- [ ] **Phase 5: Deploy** - Deploy to kainga-core via Caddy + docker-compose; LAN-only HTTPS so the family can install the PWA on Android (closes 4 deferred Phase 3 UAT items)
+- [ ] **Phase 6: Tests** - Pytest coverage for `bingo_checker` and `card_builder`, the two fragile services flagged in Phase 1's concerns audit
 
 ## Phase Details
 
@@ -72,25 +75,42 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 5: Tests & Deploy
-**Goal**: The two fragile services have automated test coverage and the app is running on kainga-core for family use
+### Phase 5: Deploy
+**Goal**: The app is running on kainga-core for family use over LAN-only HTTPS, so Mum and Gordie can install the PWA on their Android devices
 **Depends on**: Phase 4
-**Requirements**: TEST-01, TEST-02, DEPLOY-01
+**Requirements**: DEPLOY-01
 **Success Criteria** (what must be TRUE):
-  1. `pytest` passes — all winning patterns (rows, columns, diagonals, full card) and negative cases for bingo_checker are covered
-  2. `pytest` passes — card_builder tests verify no duplicates per card, free centre, and correct likelihood-tier distribution including small-pool fallback
-  3. The app is accessible to family at kainga-core via LAN and Tailscale; `docker-compose up` is the deploy mechanism; README documents the steps
+  1. `docker-compose up` on kainga-core boots the app stack (FastAPI + frontend + Caddy reverse proxy) cleanly from a fresh checkout
+  2. The app is reachable on the kainga-core LAN over **HTTPS** (cert strategy decided during planning research — Caddy local CA, mkcert, or other; constrained to LAN only, no public exposure)
+  3. From an Android phone on the kainga-core LAN, the PWA install prompt appears and the app installs to the home screen with the correct manifest icon (closes deferred Phase 3 UAT tests 1, 2, 3, 4)
+  4. README documents the deploy steps (LAN access, cert install for client devices, env vars, restart procedure)
+**Constraints (from Pippa, 2026-05-06):**
+  - LAN only — no Tailscale provisioning in this phase (existing CLAUDE.md note about LAN/Tailscale stands as a v2/future option)
+  - Caddy is the reverse proxy (existing config in home lab docs)
+  - docker-compose is the deploy mechanism
+  - Defer to home lab + system docs for kainga-core specifics; surface unknowns via /csuite (Suki is CIO advisor)
+**Plans**: TBD
+
+### Phase 6: Tests
+**Goal**: The two fragile services flagged in Phase 1's concerns audit have automated test coverage so future changes don't regress winning-pattern detection or card composition
+**Depends on**: Phase 5
+**Requirements**: TEST-01, TEST-02
+**Success Criteria** (what must be TRUE):
+  1. `pytest` passes — all winning patterns (rows, columns, diagonals, full card) and negative cases for `bingo_checker` are covered
+  2. `pytest` passes — `card_builder` tests verify no duplicates per card, free centre, and correct likelihood-tier distribution including small-pool fallback
+  3. CI or pre-commit-style hook runs the suite (mechanism TBD during planning — could be a make target, a pre-push git hook, or a docker-compose `test` service)
 **Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Code Hygiene | 5/5 | Complete | 2026-05-04 |
 | 2. AI Provider Flexibility | 3/3 | Complete | 2026-05-05 |
-| 3. PWA & Visual Polish | 1/2 | In progress | - |
+| 3. PWA & Visual Polish | 2/2 | UAT partial — 4 items deferred to Phase 5 | - |
 | 4. Local Analytics | 0/TBD | Not started | - |
-| 5. Tests & Deploy | 0/TBD | Not started | - |
+| 5. Deploy | 0/TBD | Not started | - |
+| 6. Tests | 0/TBD | Not started | - |
