@@ -8,6 +8,7 @@ venv/
 bingo.db*
 node_modules/
 frontend/dist/
+frontend/dev-dist/
 *.log
 .DS_Store
 .claude/
