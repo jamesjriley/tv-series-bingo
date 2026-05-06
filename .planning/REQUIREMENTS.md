@@ -24,7 +24,8 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 
 ### App Experience
 
-- [ ] **APP-01**: PWA manifest with app icons (192px, 512px, maskable) and theme/background colours that match the app palette
+- [x] **APP-01
+**: PWA manifest with app icons (192px, 512px, maskable) and theme/background colours that match the app palette
 - [ ] **APP-02**: Service worker registered, caching static assets and the SPA shell (network-first for `/api/*`, no offline gameplay required)
 - [ ] **APP-03**: Installable to desktop on Chromium and Safari — "Add to home screen" / "Install app" prompt available, app launches in standalone window
 - [ ] **APP-04**: Visual polish pass driven by Pippa's `/gsd-sketch` design exploration; concrete colour/typography/spacing/component-style updates derived from the resulting sketch findings skill

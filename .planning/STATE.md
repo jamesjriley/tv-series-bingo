@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-05-06T04:52:35.152Z"
-last_activity: 2026-05-06 -- Phase 03 execution started
+stopped_at: Completed 03-01-assets
+last_updated: "2026-05-06T04:57:46.163Z"
+last_activity: 2026-05-06
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
-  percent: 80
+  completed_plans: 9
+  percent: 90
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-04)
 ## Current Position
 
 Phase: 03 (pwa-visual-polish) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 03
-Last activity: 2026-05-06 -- Phase 03 execution started
+Plan: 2 of 2
+Status: Ready to execute
+Last activity: 2026-05-06
 
-Progress: [██████████] 100%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -61,6 +61,7 @@ Progress: [██████████] 100%
 | Phase 02-ai-provider-flexibility P01 | 10min | 5 tasks | 5 files |
 | Phase 02 P02 | 2min | 4 tasks | 3 files |
 | Phase 02-ai-provider-flexibility P02-03 | 3min | 2 tasks | 1 files |
+| Phase 03 P01 | 2min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,10 @@ Recent decisions affecting current work:
 - Phase 02 P03: README documents OpenRouter env contract (OPENROUTER_API_KEY + AI_MODEL) with 4 model examples including $0/month :free variant
 - Phase 02 P03: Privacy section explicit per D-10 — prompts egress to OpenRouter + upstream provider, default 30-day logging, otherwise data stays on kainga-core
 - Phase 02 P03: Deploy section structurally extensible per D-08 — Phase 5 / DEPLOY-01 extends rather than rewrites
+- Phase 03 P01: assets-generator minimal-2023 preset writes flat to public/ with WIDTHxHEIGHT names — post-generation mv into public/icons/ honours locked D-08
+- Phase 03 P01: deleted unsolicited apple-touch-icon-180x180.png and pwa-64x64.png from generator output — D-04 defers Apple touch icons
+- Phase 03 P01: favicon-32.png produced via Pillow LANCZOS downsample of pwa-192.png — preset omits standalone 32x32 PNG
+- Phase 03 P01: Task 1 + Task 2 share single chore(pwa) atomic commit per plan staging block — package.json edit lands with the icon assets
 
 ### Pending Todos
 
@@ -111,9 +116,9 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: --stopped-at
-Stopped at: Phase 3 context gathered
-Resume file: --resume-file
+Last session: 2026-05-06T04:57:46.152Z
+Stopped at: Completed 03-01-assets
+Resume file: None
 
 **Planned Phase:** 03 (pwa-visual-polish) — 2 plans — 2026-05-05T21:10:44.635Z
 **Next:** Phase 2 (AI Provider Flexibility) — run /gsd-plan-phase 2 to plan, then /gsd-execute-phase 2
