@@ -89,7 +89,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   - Caddy is the reverse proxy (existing config in home lab docs)
   - docker-compose is the deploy mechanism
   - Defer to home lab + system docs for kainga-core specifics; surface unknowns via /csuite (Suki is CIO advisor)
-**Plans**: TBD
+**Plans:** 3 plans
+- [ ] 05-01-local-prep-PLAN.md — Harden docker-compose.yml (loopback bind, mem_limit, env_file) + rewrite README kainga-core deploy section + push to Forgejo
+- [ ] 05-02-kainga-deploy-PLAN.md — Deploy on kainga-core (clone, .env, compose up, Caddyfile vhost, LE cert via DNS-01) + smoke checks + Android UAT closing Phase 3 deferred items 1-4
+- [ ] 05-03-homelab-doc-PLAN.md — Update stale ~/Documents/Obsidian/01_Projects/HomeLab/documentation/tv_bingo.md to post-Phase-5 state via obv
 
 ### Phase 6: Tests
 **Goal**: The two fragile services flagged in Phase 1's concerns audit have automated test coverage so future changes don't regress winning-pattern detection or card composition
