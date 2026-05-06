@@ -87,6 +87,10 @@ The Dockerfile is multi-stage — Node 20 builds the frontend, Python 3.11-slim 
 
 To check container logs: `docker-compose logs -f tv-bingo`. To restart after an env change: `docker-compose restart tv-bingo`. To rebuild after a code change: `docker-compose up -d --build`.
 
+## PWA install
+
+On Chromium-based browsers (Chrome, Edge, Brave), an "Install app" icon appears in the address bar once the app is loaded; click it to install TV Bingo to your desktop or start menu. On Safari/iOS, use the Share button and select "Add to Home Screen." The installed app launches in a standalone window with no browser chrome — it feels like a native app. No separate download or app store required.
+
 ## Project shape
 
 - **Backend:** FastAPI + SQLite (aiosqlite, WAL mode) — `backend/`
