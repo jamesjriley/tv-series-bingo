@@ -26,8 +26,10 @@ Requirements for the v1 milestone — polish & ship to Mum and Gordie on kainga-
 
 - [x] **APP-01
 **: PWA manifest with app icons (192px, 512px, maskable) and theme/background colours that match the app palette
-- [ ] **APP-02**: Service worker registered, caching static assets and the SPA shell (network-first for `/api/*`, no offline gameplay required)
-- [ ] **APP-03**: Installable to desktop on Chromium and Safari — "Add to home screen" / "Install app" prompt available, app launches in standalone window
+- [x] **APP-02
+**: Service worker registered, caching static assets and the SPA shell (network-first for `/api/*`, no offline gameplay required)
+- [x] **APP-03
+**: Installable to desktop on Chromium and Safari — "Add to home screen" / "Install app" prompt available, app launches in standalone window
 - [ ] **APP-04**: Visual polish pass driven by Pippa's `/gsd-sketch` design exploration; concrete colour/typography/spacing/component-style updates derived from the resulting sketch findings skill
 
 ### Analytics
@@ -95,9 +97,9 @@ Populated by the roadmapper during phase creation.
 | POLISH-03 | Phase 1 | Complete |
 | AI-01 | Phase 2 | Complete |
 | AI-02 | Phase 2 | Complete |
-| APP-01 | Phase 3 | Pending |
-| APP-02 | Phase 3 | Pending |
-| APP-03 | Phase 3 | Pending |
+| APP-01 | Phase 3 | Complete |
+| APP-02 | Phase 3 | Complete |
+| APP-03 | Phase 3 | Complete |
 | APP-04 | Phase 3 | Pending |
 | ANALYTICS-01 | Phase 4 | Pending |
 | ANALYTICS-02 | Phase 4 | Pending |

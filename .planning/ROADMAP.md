@@ -59,7 +59,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. The visual design reflects the directions from Pippa's /gsd-sketch exploration — updated colours, typography, and component styles are applied *(moves to Phase 3.1 per D-12; Phase 3 verifies on criteria #1–#3 only)*
 **Plans:** 2 plans
 - [x] 03-01-assets-PLAN.md — Tooling & assets: install vite-plugin-pwa + @vite-pwa/assets-generator, generate PNG/ICO icons from favicon.svg, delete icons.svg sprite, gitignore dev-dist
-- [ ] 03-02-wiring-PLAN.md — PWA wiring: VitePWA plugin in vite.config.ts, registerSW in main.tsx, theme-color meta tag update, tsconfig type shim, README PWA install paragraph
+- [x] 03-02-wiring-PLAN.md — PWA wiring: VitePWA plugin in vite.config.ts, registerSW in main.tsx, theme-color meta tag update, tsconfig type shim, README PWA install paragraph
 
 ### Phase 4: Local Analytics
 **Goal**: Usage data is captured locally in SQLite and visible on an admin stats page — no third-party services
